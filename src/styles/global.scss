@@ -1,0 +1,32 @@
+@import './variables.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-main;
+  background-color: $light-color;
+  color: $primary-color;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Exemple pour bouton global */
+.button {
+  background-color: $accent-color;
+  color: $light-color;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($accent-color, 10%);
+  }
+}
