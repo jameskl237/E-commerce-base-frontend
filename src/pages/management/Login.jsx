@@ -19,7 +19,7 @@ export default function Login() {
     try {
       const user = await login(email, password);
       if (user.role === "administrator") navigate("/admin/dashboard");
-      else navigate("/supplier/dashboard");
+      else navigate("/supplier/shops/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Échec de l'authentification");
     } finally {

@@ -1,17 +1,48 @@
-@import "../styles/variables.scss";
+@import "../../styles/variables.scss";
 
 .sidebar {
-  width: 220px;
-  background: $white;
-  border-right: 1px solid rgba(0,0,0,0.06);
+  width: 235px;
+  background: #007bff; // bleu uniforme
+  color: $white;
   padding: 1rem;
-  height: calc(100vh - $nav-height);
-  ul { list-style:none; padding:0; margin:0;
-    li { margin-bottom: 0.6rem;
-      a { display:block; padding:0.6rem 0.8rem; border-radius:8px; color:#333; text-decoration:none;
-        &:hover { background: rgba($blue, 0.04); }
+  position: fixed;
+  left: 0;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  border: 1px solid #fff;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.6rem;
+
+      a {
+        display: block;
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        color: $gradient-main;
+        text-decoration: none;
+
+        &:hover {
+          background: rgba($white, 0.1);
+        }
       }
-      .active { background: $blue; color: $white; }
+
+      .active {
+        background: $gradient-main;
+        color: $white;
+      }
     }
   }
+}
+
+.overlay {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background: #007bff;
+  z-index: 999;
 }

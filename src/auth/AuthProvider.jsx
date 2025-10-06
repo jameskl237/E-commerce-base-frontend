@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     }
     api.get("/auth/user")
       .then(res => {
-        setUser(res.data); // adapter selon ta réponse API
+        setUser(res.data.data); // adapter selon ta réponse API
       })
       .catch(() => {
         localStorage.removeItem("access_token");
@@ -29,21 +29,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const res = await api.post("/login", { email, password });
     // adapter selon la réponse de ton backend (ex : res.data.access_token)
-    const token = res.data.access_token || res.data.token;
+    const token = res.data.data.access_token || res.data.data.token;
     localStorage.setItem("access_token", token);
     // récupérer l'utilisateur
     const userRes = await api.get("/auth/user");
-    setUser(userRes.data);
-    return userRes.data;
+    setUser(userRes.data.data);
+    return userRes.data.data;
   };
 
   const register = async (payload) => {
     const res = await api.post("/auth/register", payload);
-    const token = res.data.access_token || res.data.token;
+    const token = res.data.data.access_token || res.data.data.token;
     if (token) localStorage.setItem("access_token", token);
     const userRes = await api.get("/auth/user");
-    setUser(userRes.data);
-    return userRes.data;
+    setUser(userRes.data.data);
+    return userRes.data.data;
   };
 
   const logout = async () => {
@@ -62,3 +62,7 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export function useAuth() {
+  return useContext(AuthContext);
+}

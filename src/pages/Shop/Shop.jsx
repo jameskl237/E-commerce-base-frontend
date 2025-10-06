@@ -22,8 +22,8 @@ const ShopPage = () => {
     api
       .get(`/shops/${shopId}`)
       .then((res) => {
-        const shopData = res.data.shop || res.data;
-        const productsData = res.data.products || shopData.products || [];
+        const shopData = res.data.data.shop || res.data.data;
+        const productsData = res.data.data.products || shopData.products || [];
         setShop(shopData);
         setProducts(productsData);
 
