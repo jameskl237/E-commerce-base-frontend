@@ -6,6 +6,7 @@ import api from "../../../api/api";
 import { FiPlus, FiSearch, FiEdit, FiTrash } from "react-icons/fi";
 import SupplierLayout from "../../../components/management/SupplierLayout";
 import ModalAddProduct from "../../../components/management/ModalAddProduct";
+import ModalConfirmation from "../../../components/management/ModalConfirmation";
 
 export default function SupplierDashboard() {
   const { shopId } = useParams(); // 👈 récupérer l'id depuis l'URL
@@ -14,6 +15,10 @@ export default function SupplierDashboard() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState({
+    isOpen: false,
+    productId: null,
+  });
 
   useEffect(() => {
     if (shopId) {
@@ -35,8 +40,26 @@ export default function SupplierDashboard() {
     }
   };
 
+  // modal de confirmation avant suppression
+
+  const confirmationModalHandler = (id) => {
+    setConfirmationModal({
+      isOpen: true,
+      productId: id,
+      title: "Confirmer la suppression",
+      message:
+        "Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.",
+      onConfirm: () => {
+        handleDelete(id);
+        setConfirmationModal({ isOpen: false, productId: null });
+      },
+      onCancel: () => setConfirmationModal({ isOpen: false, productId: null }),
+    });
+  };
+
+  //---------------------------------------------------------------
+
   const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer ce produit ?")) return;
     try {
       await api.delete(`/products/${id}`);
       setProducts((prev) => prev.filter((p) => p.id !== id));
@@ -102,9 +125,10 @@ export default function SupplierDashboard() {
                     <button className="icon-btn edit">
                       <FiEdit />
                     </button>
+
                     <button
                       className="icon-btn delete"
-                      onClick={() => handleDelete(p.id)}
+                      onClick={() => confirmationModalHandler(p.id)} // 👈 ici tu appelles ta modal
                     >
                       <FiTrash />
                     </button>
@@ -122,6 +146,16 @@ export default function SupplierDashboard() {
         onProductAdded={handleProductAdded}
         user={user} // 👈 passer l'utilisateur connecté
       />
+
+      <ModalConfirmation
+        isOpen={confirmationModal.isOpen}
+        title={confirmationModal.title}
+        message={confirmationModal.message}
+        onConfirm={confirmationModal.onConfirm}
+        onCancel={confirmationModal.onCancel}
+        isDarkMode={false} // ou une variable d’état si tu as un switch dark mode
+      />
+      
     </SupplierLayout>
   );
 }

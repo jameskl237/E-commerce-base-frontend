@@ -1,0 +1,130 @@
+// src/styles/ModalConfirmation.scss
+@import "../../styles/variables.scss";
+
+$white-fluo: #fdfdfd;
+$yellow-fluo: #ffee00;
+$blue-fluo: #003bb0;
+$pink-fluo: #ff00aa;
+$dark-bg: #0b0b1a;
+$shadow-glow: 0 0 15px rgba(255, 0, 170, 0.5);
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(20, 20, 20, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  transition: background 0.3s ease;
+
+  &.dark {
+    background: rgba(0, 0, 0, 0.75);
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: $white-fluo;
+  color: #222;
+  border-radius: 1rem;
+  box-shadow: $shadow-glow;
+  padding: 2rem 2.5rem;
+  z-index: 1010;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  border: 2px solid #74b9ff;
+  animation: fadeIn 0.3s ease;
+
+  h2 {
+    color: $pink-fluo;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    .btn {
+      padding: 0.6rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-weight: 600;
+    }
+
+    .btn-confirm {
+      background: $blue-fluo;
+      color: #fff;
+      box-shadow: 0 0 10px $blue-fluo;
+
+      &:hover {
+        transform: scale(1.05);
+        background: lighten($blue-fluo, 10%);
+      }
+    }
+
+    .btn-cancel {
+      background: $pink-fluo;
+      color: #fff;
+      box-shadow: 0 0 10px $pink-fluo;
+
+      &:hover {
+        transform: scale(1.05);
+        background: lighten($pink-fluo, 10%);
+      }
+    }
+  }
+
+  &.dark {
+    background: $dark-bg;
+    color: $white-fluo;
+    border: 2px solid $pink-fluo;
+    box-shadow: 0 0 20px $pink-fluo;
+
+    h2 {
+      color: $yellow-fluo;
+    }
+
+    p {
+      color: $white-fluo;
+    }
+
+    .btn-confirm {
+      background: $pink-fluo;
+      box-shadow: 0 0 10px $pink-fluo;
+    }
+
+    .btn-cancel {
+      background: $yellow-fluo;
+      color: #000;
+      box-shadow: 0 0 10px $yellow-fluo;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
