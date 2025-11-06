@@ -1,8 +1,6 @@
-// src/auth/AuthProvider.jsx
-import React, { createContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api/api";
-
-export const AuthContext = createContext();
+import { AuthContext } from "../context/AuthContext"; // Chemin corrigé
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // objet utilisateur {id, name, role, ...}
@@ -49,7 +47,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post("/logout"); // si ton API fournit la route
-    } catch (e) {
+    } catch {
       // ignore
     }
     localStorage.removeItem("access_token");
@@ -62,7 +60,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export function useAuth() {
-  return useContext(AuthContext);
-}

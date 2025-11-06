@@ -5,6 +5,8 @@ import Navbar from "./Navbar";
 import "./SupplierLayout.scss";
 import "../../styles/dashboard.scss";
 
+import { ThemeContext } from "../../context/ThemeContext";
+
 export default function SupplierLayout({ children }) {
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,26 +33,26 @@ export default function SupplierLayout({ children }) {
   };
 
   return (
-    <div className={`dashboard ${darkMode ? "dark" : "light"}`}>
-      <div className="supplier-layout">
-        <Navbar
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
-          toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          ref={navbarRef}
-        />
-
-        <div className="main">
-          <Sidebar
-            isOpen={sidebarOpen}
-            closeSidebar={() => setSidebarOpen(false)}
-            navHeight={navHeight}
+    <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
+      <div className={`dashboard ${darkMode ? "dark" : "light"}`}>
+        <div className="supplier-layout">
+          <Navbar
+            toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+            ref={navbarRef}
           />
-          <div className="content" onClick={handleContentClick}>
-            {children}
+
+          <div className="main">
+            <Sidebar
+              isOpen={sidebarOpen}
+              closeSidebar={() => setSidebarOpen(false)}
+              navHeight={navHeight}
+            />
+            <div className="content" onClick={handleContentClick}>
+              {children}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ThemeContext.Provider>
   );
 }

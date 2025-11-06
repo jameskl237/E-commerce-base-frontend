@@ -1,4 +1,4 @@
-@import "./variables.scss";
+@use './variables.scss' as *;
 
 // Import police Google Fonts (Poppins élégante et fine)
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap");
@@ -91,12 +91,16 @@ body {
       }
     }
   }
+
+  .menu-btn {
+    display: none; // Caché par défaut sur les grands écrans
+  }
 }
 
 // 🚀 Header
 .dashboard-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 1.5rem 2rem;
   flex-wrap: wrap;
@@ -216,6 +220,15 @@ body {
   }
 }
 
+.dashboard.dark .search-box {
+  background: $card-dark; // ✅ fond sombre
+  color: $text-light;     // ✅ texte clair
+
+  input {
+    color: $text-light;   // ✅ texte clair dans le champ de recherche
+  }
+}
+
 // 🚀 Table en mode sombre
 .dashboard.dark .product-table {
   background: $card-dark;
@@ -244,6 +257,28 @@ body {
     flex-direction: column;
     align-items: center;
   }
+  .navbar {
+    .menu-btn {
+      display: none; // Caché par défaut sur les grands écrans
+      color: $primary-color;
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+    }
+    .logo {
+      display: none; // Caché pour faire de la place
+    }
+  }
 }
 
 @media (max-width: 768px) {
@@ -254,13 +289,23 @@ body {
   }
 
   .navbar {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+    padding: 1rem;
 
-  .logo{
-    display: none;
+    .menu-btn {
+      display: block; // Affiché sur les petits écrans
+    }
+
+    .logo {
+      display: none; // Caché pour faire de la place
+    }
+
+    .navbar-right {
+      gap: 0.5rem;
+
+      .logout-btn span {
+        display: none; // Cacher le texte du bouton déconnexion
+      }
+    }
   }
 
   .product-table {
@@ -279,33 +324,72 @@ body {
 @media (max-width: 480px) {
   body {
     font-size: 14px;
-    overflow-x: hidden; // 🚀 empêche tout scroll horizontal global
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
-  .navbar .logo {
-    font-size: 1.1rem;
+  .navbar {
+    .logo {
+      font-size: 1.1rem;
+    }
+    .menu-btn {
+    display: none; // Caché par défaut sur les grands écrans
+
+    // couleur de l'icône identique au bleu de la navbar
+    color: $primary-color;
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+  }
   }
 
-  .btn-add{
+  .btn-add {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 90%; // Réduit la largeur pour éviter le débordement
+    margin: 0 auto; // Centre horizontalement
   }
 
-  .search-box{
+  .search-box {
+    width: 90%; // Réduit la largeur pour éviter le débordement
+    margin: 0 auto; // Centre horizontalement
     display: flex;
     justify-content: center;
-    align-items: center;
   }
 
   .table-container {
-    max-width: 90vw; // encore plus compact sur mobile
-  }
-
-  .product-table th,
-  .product-table td {
-    padding: 0.6rem;
-    font-size: 0.75rem;
+    width: 95%;
+    margin: 0 auto;
+    background-color: $white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    overflow-x: hidden; // Cache le scroll horizontal
+    
+    .product-table {
+      width: 100%;
+      margin: 0 auto;
+      
+      th, td {
+        padding: 0.6rem;
+        font-size: 0.75rem;
+        white-space: normal; // Permet le retour à la ligne du texte
+        word-break: break-word; // Coupe les mots longs si nécessaire
+      }
+    }
   }
 }
 
@@ -340,6 +424,7 @@ body {
     margin: 0.5rem 0;
     font-size: 1.2rem;
     font-weight: 500;
+    color: $primary-color;
   }
 
   p {
@@ -383,6 +468,10 @@ body {
   .btn-edit {
     background: $gradient-main;
   }
+
+  h3{
+    color: $text-light;
+  }
 }
 
 // 🚀 Responsive
@@ -409,4 +498,21 @@ body {
 
 .page-content {
   padding: 1.5rem;
+}
+
+.dashboard-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - #{$nav-height} - 3rem); // 100vh - navbar height - content padding
+
+  .table-container {
+    flex: 1;
+    overflow-y: auto;        // ✅ scroll vertical
+    overflow-x: auto;        // ✅ scroll horizontal si besoin
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: transparent; // optionnel, pour garder le fond du dashboard
+  }
 }

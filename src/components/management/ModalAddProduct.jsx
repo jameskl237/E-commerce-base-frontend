@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import {
   FiX,
   FiUpload,
@@ -54,10 +55,10 @@ const ModalAddProduct = ({
         let response;
         try {
           response = await api.get("/categories");
-        } catch (firstError) {
+        } catch {
           try {
             response = await api.get("/product-categories");
-          } catch (secondError) {
+          } catch {
             response = await api.get("/api/categories");
           }
         }
@@ -182,37 +183,6 @@ const ModalAddProduct = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const showToast = (message, type = "success") => {
-    // Créer un élément toast temporaire
-    const toast = document.createElement("div");
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    toast.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      color: white;
-      font-weight: 500;
-      z-index: 10000;
-      animation: slideIn 0.3s ease-out;
-      background-color: ${type === "success" ? "#10b981" : "#ef4444"};
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    `;
-
-    document.body.appendChild(toast);
-
-    // Supprimer après 4 secondes
-    setTimeout(() => {
-      toast.style.animation = "slideOut 0.3s ease-in";
-      setTimeout(() => {
-        if (document.body.contains(toast)) {
-          document.body.removeChild(toast);
-        }
-      }, 300);
-    }, 4000);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -222,10 +192,7 @@ const ModalAddProduct = ({
     }
 
     if (files.length === 0) {
-      showToast(
-        "Veuillez ajouter au moins un fichier (image ou vidéo)",
-        "error"
-      );
+      toast.error("Veuillez ajouter au moins un fichier (image ou vidéo)");
       return;
     }
 
@@ -237,23 +204,21 @@ const ModalAddProduct = ({
 
     // Vérifier que les données requises sont présentes
     if (!shopId) {
-      showToast(
-        "Erreur: ID du magasin manquant. Assurez-vous que l'URL contient l'ID du magasin.",
-        "error"
+      toast.error(
+        "Erreur: ID du magasin manquant. Assurez-vous que l'URL contient l'ID du magasin."
       );
       return;
     }
 
     if (authLoading) {
-      showToast("Chargement des données utilisateur...", "error");
+      toast.error("Chargement des données utilisateur...");
       return;
     }
 
     if (!userData?.id) {
       console.error("Utilisateur non trouvé:", userData);
-      showToast(
-        "Erreur: Utilisateur non connecté. Veuillez vous reconnecter.",
-        "error"
+      toast.error(
+        "Erreur: Utilisateur non connecté. Veuillez vous reconnecter."
       );
       return;
     }
@@ -310,11 +275,11 @@ const ModalAddProduct = ({
       console.log("Réponse de l'API:", response);
 
       if (response.status === 200 || response.status === 201) {
-        showToast("Produit ajouté avec succès !", "success");
+        toast.success("Produit ajouté avec succès !");
         onProductAdded && onProductAdded();
         handleClose();
       } else {
-        showToast("Erreur inattendue lors de l'ajout du produit", "error");
+        toast.error("Erreur inattendue lors de l'ajout du produit");
       }
     } catch (error) {
       console.error("Erreur lors de l'ajout du produit:", error);
@@ -353,7 +318,7 @@ const ModalAddProduct = ({
         console.error("Erreur:", error.message);
       }
 
-      showToast(errorMessage, "error");
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -1,14 +1,18 @@
 // src/pages/supplier/SupplierDashboard.jsx
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // 👈 import
+import { useParams, Link } from "react-router-dom"; // 👈 import
 import useAuth from "../../../auth/useAuth";
 import api from "../../../api/api";
 import { FiPlus, FiSearch, FiEdit, FiTrash } from "react-icons/fi";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SupplierLayout from "../../../components/management/SupplierLayout";
 import ModalAddProduct from "../../../components/management/ModalAddProduct";
 import ModalConfirmation from "../../../components/management/ModalConfirmation";
+import { useTheme } from "../../../context/ThemeContext";
 
-export default function SupplierDashboard() {
+function SupplierDashboardContent() {
+  const { darkMode } = useTheme();
   const { shopId } = useParams(); // 👈 récupérer l'id depuis l'URL
   const { user } = useAuth(); // 👈 récupérer l'utilisateur connecté
   const [products, setProducts] = useState([]);
@@ -62,9 +66,11 @@ export default function SupplierDashboard() {
   const handleDelete = async (id) => {
     try {
       await api.delete(`/products/${id}`);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      setProducts((prev) => prev.filter((p) => p.id != id));
+      toast.success('Produit supprimé avec succès');
     } catch (err) {
       console.error("Erreur suppression", err);
+      toast.error('Erreur lors de la suppression du produit');
     }
   };
 
@@ -75,12 +81,24 @@ export default function SupplierDashboard() {
     }
   };
 
-  const filteredProducts = products.filter((p) =>
-    p.name?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredProducts = products.filter((product) => {
+    const searchTerm = search.toLowerCase();
+    // Parcourir toutes les valeurs de l'objet produit
+    for (const key in product) {
+      if (Object.prototype.hasOwnProperty.call(product, key)) {
+        const value = product[key];
+        // Vérifier si la valeur existe et si elle inclut le terme de recherche
+        if (value && value.toString().toLowerCase().includes(searchTerm)) {
+          return true; // Si une correspondance est trouvée, inclure le produit
+        }
+      }
+    }
+    return false; // Si aucune correspondance n'est trouvée, exclure le produit
+  });
 
   return (
-    <SupplierLayout>
+    <>
+      <ToastContainer />
       <header className="dashboard-header">
         <div className="search-box">
           <FiSearch className="search-icon" />
@@ -122,9 +140,9 @@ export default function SupplierDashboard() {
                   <td>{p.in_stock ? "✅ Oui" : "❌ Non"}</td>
                   <td>{p.origin}</td>
                   <td className="actions">
-                    <button className="icon-btn edit">
+                    <Link to={`/supplier/product/edit/${p.id}`} className="icon-btn edit">
                       <FiEdit />
-                    </button>
+                    </Link>
 
                     <button
                       className="icon-btn delete"
@@ -153,9 +171,18 @@ export default function SupplierDashboard() {
         message={confirmationModal.message}
         onConfirm={confirmationModal.onConfirm}
         onCancel={confirmationModal.onCancel}
-        isDarkMode={false} // ou une variable d’état si tu as un switch dark mode
+        isDarkMode={darkMode}
       />
-      
-    </SupplierLayout>
+    </>
   );
+}
+
+export default function SupplierDashboard() {
+    return (
+        <SupplierLayout>
+            <div className="dashboard-content-wrapper">
+                <SupplierDashboardContent />
+            </div>
+        </SupplierLayout>
+    )
 }

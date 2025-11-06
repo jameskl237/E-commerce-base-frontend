@@ -1,6 +1,7 @@
 // src/pages/supplier/ShopsDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { FiShoppingBag, FiEdit } from "react-icons/fi";
+import { toast } from "react-toastify";
 import api from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 import SupplierLayout from "../../../components/management/SupplierLayout";
@@ -17,8 +18,10 @@ export default function ShopsDashboard() {
     try {
       const res = await api.get("auth/user"); 
       setShops(res.data.data.shops);
+      toast.success("Boutiques chargées avec succès !");
     } catch (err) {
       console.error("Erreur récupération boutiques", err);
+      toast.error("Erreur lors du chargement des boutiques.");
     }
   };
 

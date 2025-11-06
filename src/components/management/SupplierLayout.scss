@@ -1,4 +1,4 @@
-@import "../../styles/variables.scss";
+@use '../../styles/variables.scss' as *;
 
 .supplier-layout {
   .main {
@@ -10,7 +10,12 @@
     margin-left: 220px;
     padding: 1.5rem;
     flex: 1;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s ease, background-color 0.3s ease; // Add transition
+    background-color: transparent; // Default to transparent
+  }
+
+  .dashboard.dark .content {
+    background-color: $dark-background; // Explicitly set dark background
   }
 
   // ===== Navbar fixée en haut =====
@@ -72,4 +77,8 @@
       display: none; // masqué sur desktop
     }
   }
-}
+
+  .dashboard-header{
+     
+  }
+} 

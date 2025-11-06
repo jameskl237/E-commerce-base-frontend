@@ -1,4 +1,6 @@
-@import "./variables.scss";
+@use './variables.scss' as *;
+
+@use 'sass:color';
 
 .auth-page {
   min-height: calc(100vh - $nav-height);
@@ -95,7 +97,7 @@
 
     .alert {
       background: #ffeef6;
-      color: darken($pink, 20%);
+      color: color.adjust($pink, $lightness: -20%);
       padding: 0.6rem;
       border-radius: 8px;
       margin-bottom: 0.6rem;

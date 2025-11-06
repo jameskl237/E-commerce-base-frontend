@@ -7,4 +7,8 @@ const api = axios.create({
   },
 });
 
+export const getProductById = (id) => api.get(`/products/${id}`);
+
+export const updateProduct = (id, data) => api.put(`/products/${id}`, data);
+
 export default api;

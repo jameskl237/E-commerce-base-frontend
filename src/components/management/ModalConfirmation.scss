@@ -1,5 +1,6 @@
+@use 'sass:color';
+
 // src/styles/ModalConfirmation.scss
-@import "../../styles/variables.scss";
 
 $white-fluo: #fdfdfd;
 $yellow-fluo: #ffee00;
@@ -75,7 +76,7 @@ $shadow-glow: 0 0 15px rgba(255, 0, 170, 0.5);
 
       &:hover {
         transform: scale(1.05);
-        background: lighten($blue-fluo, 10%);
+        background: color.adjust($blue-fluo, $lightness: 10%);
       }
     }
 
@@ -86,7 +87,7 @@ $shadow-glow: 0 0 15px rgba(255, 0, 170, 0.5);
 
       &:hover {
         transform: scale(1.05);
-        background: lighten($pink-fluo, 10%);
+        background: color.adjust($pink-fluo, $lightness: 10%);
       }
     }
   }

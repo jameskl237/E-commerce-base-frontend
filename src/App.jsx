@@ -6,14 +6,19 @@ import AllProducts from "./pages/Accueil/AllProducts";
 import Login from "./pages/management/Login";
 import SupplierDashboard from "./pages/management/supplier/SupplierManagement";
 import ShopsDashboard from "./pages/management/supplier/ShopsDashboard";
+import ProductEditPage from "./pages/management/supplier/product-edit/ProductEditPage"; // Import de la nouvelle page
 import { AuthProvider } from "./auth/AuthProvider";
 import PrivateRoute from "./auth/PrivateRoute";
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ApiTest from "./components/ApiTest";
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
+
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
@@ -32,8 +37,15 @@ export default function App() {
             </PrivateRoute>
           } />
 
+          <Route path="/supplier/product/edit/:productId" element={
+            <PrivateRoute>
+              <ProductEditPage />
+            </PrivateRoute>
+          } />
+
           {/* Add more routes as needed */}
         </Routes>
+        <ToastContainer />
     </Router>
     </AuthProvider>
   );
