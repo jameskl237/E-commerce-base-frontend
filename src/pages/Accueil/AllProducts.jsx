@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import "./AllProducts.scss";
 import Footer from "../../components/Accueil/Footer";
+import { API_BASE_URL } from "../../config/constants"; // Import the constant
 
 // Import des icônes
 import {
@@ -139,7 +140,7 @@ const AllProducts = () => {
                   <img
                     src={
                       p.medias?.length > 0
-                        ? p.medias[0].url || `http://localhost:8000/storage/${p.medias[0].file_path}`
+                        ? p.medias[0].url || `${API_BASE_URL}/storage/${p.medias[0].file_path}`
                         : "/src/assets/default.jpg"
                     }
                     alt={p.name}
