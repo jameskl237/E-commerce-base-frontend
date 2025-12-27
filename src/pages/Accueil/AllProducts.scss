@@ -175,6 +175,8 @@
       display: block;
       text-decoration: none;
       color: inherit; /* Inherit color from parent or define as needed */
+      max-width: 280px; /* Limit the width of a single product card */
+      margin: 0 auto; /* Center the card if it's the only one */
     }
 
     .product-card {
