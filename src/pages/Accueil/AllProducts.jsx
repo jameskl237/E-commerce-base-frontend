@@ -21,6 +21,8 @@ const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+
 
   // Charger les produits au montage du composant
   useEffect(() => {
@@ -38,6 +40,12 @@ const AllProducts = () => {
         setLoading(false);
       });
   }, []);
+
+  // Filter products based on search query
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    product.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="product-page">
@@ -63,7 +71,12 @@ const AllProducts = () => {
 
         {/* Search bar */}
         <div className="search-bar">
-          <input type="text" placeholder="Rechercher un produit..." />
+          <input
+            type="text"
+            placeholder="Rechercher un produit..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <button>
             <FaSearch />
           </button>
@@ -119,14 +132,14 @@ const AllProducts = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <div className="product-grid">
-          {products.length > 0
-            ? products.map((p) => (
+          {filteredProducts.length > 0
+            ? filteredProducts.map((p) => (
                 <div className="product-card" key={p.id}>
                   {/* ⚠️ Laravel doit retourner un champ "image_url" ou "image" */}
                   <img
                     src={
                       p.medias?.length > 0
-                        ? p.medias[0].url || `/storage/${p.medias[0].file_path}`
+                        ? p.medias[0].url || `http://localhost:8000/storage/${p.medias[0].file_path}`
                         : "/src/assets/default.jpg"
                     }
                     alt={p.name}
