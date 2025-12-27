@@ -3,6 +3,7 @@ import api from "../../services/api";
 import "./AllProducts.scss";
 import Footer from "../../components/Accueil/Footer";
 import { API_BASE_URL } from "../../config/constants"; // Import the constant
+import { Link } from 'react-router-dom'; // Import Link
 
 // Import des icônes
 import {
@@ -135,20 +136,22 @@ const AllProducts = () => {
         <div className="product-grid">
           {filteredProducts.length > 0
             ? filteredProducts.map((p) => (
-                <div className="product-card" key={p.id}>
-                  {/* ⚠️ Laravel doit retourner un champ "image_url" ou "image" */}
-                  <img
-                    src={
-                      p.medias?.length > 0
-                        ? p.medias[0].url || `${API_BASE_URL}/storage/${p.medias[0].file_path}`
-                        : "/src/assets/default.jpg"
-                    }
-                    alt={p.name}
-                  />
-                  <h3>{p.name}</h3>
-                  <p className="price">{p.price} FCFA</p>
-                  <button className="buy-btn">Ajouter au panier</button>
-                </div>
+                <Link to={`/product/${p.id}`} key={p.id} className="product-card-link">
+                  <div className="product-card">
+                    {/* ⚠️ Laravel doit retourner un champ "image_url" ou "image" */}
+                    <img
+                      src={
+                        p.medias?.length > 0
+                          ? `${API_BASE_URL}/storage/${p.medias[0].url.replace(/^\//, '')}`
+                          : "/src/assets/default.jpg"
+                      }
+                      alt={p.name}
+                    />
+                    <h3>{p.name}</h3>
+                    <p className="price">{p.price} FCFA</p>
+                    <button className="buy-btn">Ajouter au panier</button>
+                  </div>
+                </Link>
               ))
             : !loading && <p>Aucun produit disponible.</p>}
         </div>
