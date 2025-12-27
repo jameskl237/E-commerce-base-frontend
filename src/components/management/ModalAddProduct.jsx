@@ -173,7 +173,7 @@ const ModalAddProduct = ({
     // Validation du prix de promotion si fourni
     if (
       formData.promotion_price &&
-      formData.promotion_price >= formData.price
+      parseFloat(formData.promotion_price) >= parseFloat(formData.price)
     ) {
       newErrors.promotion_price =
         "Le prix de promotion doit être inférieur au prix normal";

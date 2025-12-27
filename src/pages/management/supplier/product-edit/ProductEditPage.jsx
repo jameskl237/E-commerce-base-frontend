@@ -8,49 +8,58 @@ import MediaCarousel from '../../../../components/management/product-edit/MediaC
 import ProductForm from '../../../../components/management/product-edit/ProductForm';
 
 // Import des fonctions API
-import { getProductById, updateProduct } from '../../../../services/api'; // Assumant l'existence de ces fonctions
+import { getProductById, updateProduct } from '../../../../services/api';
+import api from '../../../../api/api';
 
 import SupplierLayout from '../../../../components/management/SupplierLayout';
-
-
 
 const ProductEditPageContent = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   
   const [product, setProduct] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProductAndCategories = async () => {
       try {
         setLoading(true);
-        // Simuler des données pour le développement
-        // Remplacer par l'appel API réel : const data = await getProductById(productId);
-        const mockData = {
-          id: productId,
-          name: 'Produit Exemple',
-          description: 'Ceci est une description détaillée du produit. On peut la modifier.',
-          price: 99.99,
-          stock: 150,
-          media: [
-            { type: 'image', url: 'https://via.placeholder.com/400x300.png/007bff/ffffff?text=Image+1' },
-            { type: 'image', url: 'https://via.placeholder.com/400x300.png/28a745/ffffff?text=Image+2' },
-            { type: 'video', url: 'https://www.w3schools.com/html/mov_hts-samp.mp4' }, // Smaller placeholder video
-            { type: 'image', url: 'https://via.placeholder.com/400x300.png/dc3545/ffffff?text=Image+3' },
-          ]
-        };
-        setProduct(mockData);
+        // Fetch product data
+        const productData = await getProductById(productId);
+        console.log('Fetched product data:', productData.data.data);
+        setProduct(productData.data.data);
+
+        // Fetch categories
+        let response;
+        try {
+          response = await api.get("/categories");
+        } catch {
+          try {
+            response = await api.get("/product-categories");
+          } catch {
+            response = await api.get("/api/categories");
+          }
+        }
+        const categoriesData = response.data?.data || response.data || [];
+        console.log('Fetched categories data:', categoriesData);
+        setCategories(categoriesData);
+
       } catch (err) {
-        setError('Erreur lors de la récupération du produit.');
+        setError('Erreur lors de la récupération des données.');
         console.error(err);
+         setCategories([
+          { id: 1, name: "Électronique", slug: "electronics" },
+          { id: 2, name: "Vêtements", slug: "clothing" },
+          { id: 3, name: "Maison & Jardin", slug: "home" },
+        ]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProduct();
+    fetchProductAndCategories();
   }, [productId]);
 
   const handleFormChange = (updatedProduct) => {
@@ -59,9 +68,14 @@ const ProductEditPageContent = () => {
 
   const handleFormSubmit = async () => {
     try {
-      // Remplacer par l'appel API réel: await updateProduct(productId, product);
+      await updateProduct(productId, product);
+      console.log('Submitting product update:', product);
       alert('Produit mis à jour avec succès !');
-      navigate('/supplier/management'); // Rediriger vers la page de gestion
+      if (product && product.shop_id) {
+        navigate(`/supplier/dashboard/${product.shop_id}`); // Rediriger vers le tableau de bord de la boutique
+      } else {
+        navigate('/supplier/shops/dashboard'); // Fallback si le shopId n'est pas disponible
+      }
     } catch (err) {
       alert('Erreur lors de la mise à jour du produit.');
       console.error(err);
@@ -82,12 +96,13 @@ const ProductEditPageContent = () => {
         </div>
         <div className="edit-container">
           <div className="media-section">
-            {product && <MediaCarousel media={product.media} />}
+            {product && <MediaCarousel product={product} />}
           </div>
           <div className="form-section">
             {product && (
               <ProductForm
                 product={product}
+                categories={categories}
                 onChange={handleFormChange}
                 onSubmit={handleFormSubmit}
               />
