@@ -65,14 +65,59 @@
       }
 
       input,
-      textarea {
+      textarea,
+      select { // Ajout de 'select' ici pour la cohérence
         background-color: $dark-input-background;
         border-color: $dark-input-border;
         color: $dark-text-color;
+        
+        &::placeholder { // Assure que le placeholder change aussi de couleur
+            color: $dark-secondary-text-color;
+        }
 
         &:focus {
           border-color: color.adjust($dark-input-border, $lightness: 10%);
           box-shadow: 0 0 0 4px rgba(color.adjust($dark-input-border, $lightness: 10%), 0.2);
+        }
+      }
+    }
+
+    // Styles mode sombre pour la section d'upload de fichiers
+    .file-upload-section {
+      background-color: $dark-input-background;
+      border: 1px dashed $dark-input-border;
+      
+      .file-upload-label {
+        color: $dark-secondary-text-color;
+        .upload-icon { // Assuming upload-icon is within the label
+          color: $dark-secondary-text-color;
+        }
+      }
+      .file-info {
+        color: $dark-secondary-text-color;
+      }
+    }
+
+    .files-preview {
+      h4 {
+        color: $dark-text-color;
+      }
+      .files-grid {
+        .file-item {
+          background-color: $dark-card-background; // Couleur de fond pour chaque fichier
+          border: 1px solid $dark-input-border;
+          .file-info {
+            .file-icon, .file-name {
+              color: $dark-text-color;
+            }
+          }
+          .remove-file-btn {
+            color: $dark-text-color;
+            background-color: transparent;
+            &:hover {
+              color: $accent-color; // Couleur d'accent pour la suppression
+            }
+          }
         }
       }
     }

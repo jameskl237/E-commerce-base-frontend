@@ -11,6 +11,14 @@ export default function ShopsDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const successMessage = sessionStorage.getItem('updateSuccess');
+    if (successMessage) {
+      toast.success(successMessage);
+      sessionStorage.removeItem('updateSuccess');
+    }
+  }, []);
+
+  useEffect(() => {
     fetchShops();
   }, []);
 
@@ -18,7 +26,6 @@ export default function ShopsDashboard() {
     try {
       const res = await api.get("auth/user"); 
       setShops(res.data.data.shops);
-      toast.success("Boutiques chargées avec succès !");
     } catch (err) {
       console.error("Erreur récupération boutiques", err);
       toast.error("Erreur lors du chargement des boutiques.");

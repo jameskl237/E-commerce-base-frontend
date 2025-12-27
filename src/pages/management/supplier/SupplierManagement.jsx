@@ -8,7 +8,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SupplierLayout from "../../../components/management/SupplierLayout";
 import ModalAddProduct from "../../../components/management/ModalAddProduct";
-import ModalConfirmation from "../../../components/management/ModalConfirmation";
 import { useTheme } from "../../../context/ThemeContext";
 
 function SupplierDashboardContent() {
@@ -19,10 +18,14 @@ function SupplierDashboardContent() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [confirmationModal, setConfirmationModal] = useState({
-    isOpen: false,
-    productId: null,
-  });
+
+  useEffect(() => {
+    const successMessage = sessionStorage.getItem('updateSuccess');
+    if (successMessage) {
+      toast.success(successMessage);
+      sessionStorage.removeItem('updateSuccess');
+    }
+  }, []);
 
   useEffect(() => {
     if (shopId) {
@@ -42,23 +45,6 @@ function SupplierDashboardContent() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // modal de confirmation avant suppression
-
-  const confirmationModalHandler = (id) => {
-    setConfirmationModal({
-      isOpen: true,
-      productId: id,
-      title: "Confirmer la suppression",
-      message:
-        "Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.",
-      onConfirm: () => {
-        handleDelete(id);
-        setConfirmationModal({ isOpen: false, productId: null });
-      },
-      onCancel: () => setConfirmationModal({ isOpen: false, productId: null }),
-    });
   };
 
   //---------------------------------------------------------------
@@ -146,7 +132,7 @@ function SupplierDashboardContent() {
 
                     <button
                       className="icon-btn delete"
-                      onClick={() => confirmationModalHandler(p.id)} // 👈 ici tu appelles ta modal
+                      onClick={() => handleDelete(p.id)}
                     >
                       <FiTrash />
                     </button>
@@ -163,15 +149,6 @@ function SupplierDashboardContent() {
         onClose={() => setIsModalOpen(false)}
         onProductAdded={handleProductAdded}
         user={user} // 👈 passer l'utilisateur connecté
-      />
-
-      <ModalConfirmation
-        isOpen={confirmationModal.isOpen}
-        title={confirmationModal.title}
-        message={confirmationModal.message}
-        onConfirm={confirmationModal.onConfirm}
-        onCancel={confirmationModal.onCancel}
-        isDarkMode={darkMode}
       />
     </>
   );
