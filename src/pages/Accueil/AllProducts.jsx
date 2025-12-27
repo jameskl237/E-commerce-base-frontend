@@ -11,11 +11,6 @@ import {
   FaShoppingCart,
   FaUser,
   FaBars,
-  FaMobileAlt,
-  FaTshirt,
-  FaHome,
-  FaSpa,
-  FaCar,
 } from "react-icons/fa";
 
 const AllProducts = () => {
@@ -24,7 +19,8 @@ const AllProducts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
-
+  const [categories, setCategories] = useState([]); // State for categories
+  const [selectedCategory, setSelectedCategory] = useState(''); // State for selected category
 
   // Charger les produits au montage du composant
   useEffect(() => {
@@ -43,11 +39,24 @@ const AllProducts = () => {
       });
   }, []);
 
-  // Filter products based on search query
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Charger les catégories au montage du composant
+  useEffect(() => {
+    api.get("/categories")
+      .then(res => {
+        setCategories(res.data.data || res.data);
+      })
+      .catch(err => {
+        console.error("Erreur lors du chargement des catégories :", err);
+      });
+  }, []);
+
+  // Filter products based on search query and selected category
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === '' || (product.category && product.category.id === parseInt(selectedCategory));
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="product-page">
@@ -104,26 +113,19 @@ const AllProducts = () => {
         <p>Des produits de qualité à des prix compétitifs</p>
       </header>
 
-      {/* Categories menu */}
-      <section className="categories">
-        <h2>Catégories populaires</h2>
-        <div className="categories-grid">
-          <div className="cat-card">
-            <FaMobileAlt /> Électronique
-          </div>
-          <div className="cat-card">
-            <FaTshirt /> Mode
-          </div>
-          <div className="cat-card">
-            <FaHome /> Maison & Jardin
-          </div>
-          <div className="cat-card">
-            <FaSpa /> Beauté
-          </div>
-          <div className="cat-card">
-            <FaCar /> Automobile
-          </div>
-        </div>
+      {/* Categories Dropdown */}
+      <section className="categories-filter">
+        <h2>Filtrer par Catégorie</h2>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="category-dropdown"
+        >
+          <option value="">Toutes les catégories</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
       </section>
 
       {/* Produits */}
