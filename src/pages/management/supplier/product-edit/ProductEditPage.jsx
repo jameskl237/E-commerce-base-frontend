@@ -102,7 +102,7 @@ const ProductEditPageContent = () => {
 
     // 2. Ajouter les nouveaux fichiers
     newFiles.forEach(file => {
-      formData.append('new_files[]', file);
+      formData.append('files[]', file);
     });
 
     // 3. Ajouter les IDs des médias à supprimer
