@@ -116,7 +116,7 @@ const ModalAddProduct = ({
 
     // Vérifier le nombre maximum de fichiers
     if (files.length + newFiles.length > 4) {
-      alert("Vous ne pouvez ajouter que 4 fichiers maximum");
+      toast.error("Vous ne pouvez ajouter que 4 fichiers maximum");
       return;
     }
 
@@ -135,7 +135,7 @@ const ModalAddProduct = ({
     );
 
     if (invalidFiles.length > 0) {
-      alert(
+      toast.error(
         "Seuls les fichiers images (JPEG, PNG, GIF, WebP) et vidéos (MP4, WebM, OGG) sont autorisés"
       );
       return;
@@ -146,7 +146,7 @@ const ModalAddProduct = ({
       (file) => file.size > 10 * 1024 * 1024
     );
     if (oversizedFiles.length > 0) {
-      alert("La taille maximale par fichier est de 10MB");
+      toast.error("La taille maximale par fichier est de 10MB");
       return;
     }
 

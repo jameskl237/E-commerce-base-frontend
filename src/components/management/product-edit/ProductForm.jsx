@@ -1,13 +1,18 @@
 import React from 'react';
+import { FiUpload, FiTrash2, FiImage, FiVideo } from 'react-icons/fi';
 import './ProductForm.scss';
 
-const ProductForm = ({ product, categories, onChange, onSubmit }) => {
+const ProductForm = ({ product, categories, onChange, onSubmit, newFiles, onFilesChange }) => {
   // Gestionnaire de changement pour tous les inputs
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     let val = type === 'checkbox' ? checked : value;
     if (name === 'in_stock') {
       val = value === 'true';
+    } else if (name === 'category') {
+      val = parseInt(value, 10);
+      onChange({ ...product, category_id: val });
+      return;
     }
     onChange({ ...product, [name]: val });
   };
@@ -18,10 +23,24 @@ const ProductForm = ({ product, categories, onChange, onSubmit }) => {
     onSubmit();
   };
 
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+     if (files.length > 0) {
+      onFilesChange(files, 'add');
+    }
+     // Vider l'input pour permettre de resélectionner le même fichier
+    e.target.value = '';
+  };
+
+  const removeNewFile = (index) => {
+    onFilesChange(index, 'remove');
+  };
+
   return (
     <form className="product-form" onSubmit={handleSubmit}>
       <h2>Détails du Produit</h2>
       
+      {/* ... existing form groups ... */}
       <div className="form-group">
         <label htmlFor="name">Nom du produit</label>
         <input
@@ -124,13 +143,13 @@ const ProductForm = ({ product, categories, onChange, onSubmit }) => {
           <select
             id="category"
             name="category"
-            value={product?.category?.slug || product?.category?.name || ''}
+            value={product?.category_id || ''}
             onChange={handleChange}
             required
           >
             <option value="">Sélectionnez une catégorie</option>
             {categories?.map((cat) => (
-              <option key={cat.id} value={cat.slug || cat.name}>
+              <option key={cat.id} value={cat.id}>
                 {cat.name}
               </option>
             ))}
@@ -138,8 +157,49 @@ const ProductForm = ({ product, categories, onChange, onSubmit }) => {
         </div>
       </div>
 
+      {/* Section pour ajouter de nouveaux médias */}
+      <div className="file-upload-section">
+        <label className="file-upload-label">
+          <FiUpload />
+          <span>Ajouter de nouveaux médias</span>
+          <input
+            type="file"
+            multiple
+            accept="image/*,video/*"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+        </label>
+        <p className="file-info">Vous pouvez ajouter de nouvelles images ou vidéos ici.</p>
+      </div>
+
+      {/* Prévisualisation des nouveaux fichiers */}
+      {newFiles && newFiles.length > 0 && (
+        <div className="files-preview">
+          <h4>Nouveaux médias à ajouter :</h4>
+          <div className="files-grid">
+            {newFiles.map((file, index) => (
+              <div key={index} className="file-item">
+                <div className="file-info">
+                  {file.type.startsWith("image/") ? <FiImage /> : <FiVideo />}
+                  <span className="file-name">{file.name}</span>
+                </div>
+                <button
+                  type="button"
+                  className="remove-file-btn"
+                  onClick={() => removeNewFile(index)}
+                >
+                  <FiTrash2 />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+
       <button type="submit" className="btn-submit">
-        Modifier le Produit
+        Enregistrer les modifications
       </button>
     </form>
   );

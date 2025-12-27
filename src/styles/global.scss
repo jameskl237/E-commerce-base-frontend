@@ -21,6 +21,19 @@ body {
 .dashboard.dark {
     background-color: $dark-background; // Dark mode background for body
     color: $dark-text-color; // Dark mode text color for body
+
+    // Fix pour les éléments de formulaire en mode sombre
+    input,
+    textarea,
+    select {
+      background-color: $dark-input-background;
+      color: $dark-text-color;
+      border: 1px solid $dark-input-border;
+      
+      &::placeholder {
+        color: $dark-secondary-text-color;
+      }
+    }
   }
 
 
