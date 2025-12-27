@@ -171,6 +171,12 @@
       gap: 2rem;
     }
 
+    .product-card-link {
+      display: block;
+      text-decoration: none;
+      color: inherit; /* Inherit color from parent or define as needed */
+    }
+
     .product-card {
       background: white;
       padding: 1.5rem;
@@ -191,6 +197,7 @@
         object-fit: cover;
         border-radius: 10px;
         margin-bottom: 1rem;
+        flex-shrink: 0; /* Prevent image from shrinking */
       }
 
       h3 {
