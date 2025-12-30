@@ -1,78 +1,56 @@
-import React, { useState } from "react";
-import {
-  FaSearch,
-  FaBars,
-  FaUserCircle,
-  FaInfoCircle,
-  FaCog,
-  FaShoppingCart,
-  FaStore,
-} from "react-icons/fa";
+import React, { useState } from 'react';
+import { FaSearch, FaShoppingCart, FaUser, FaBars } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import MaketuLogo from '/src/assets/Maketu_logo.png';
+import './NavbarShop.scss'; // Import its own styles
 
-const Navbar = ({ shop }) => {
-  // declaration des states
-
+const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // comportemets
-
-  React.useEffect(() => {
-    if (!menuOpen) return;
-    const handleClickOutside = (event) => {
-      // Vérifie si le clic est en dehors du menu et du bouton
-      if (
-        !event.target.closest(".dropdown-menu") &&
-        !event.target.closest(".menu-btn")
-      ) {
-        setMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [menuOpen]);
-
-  // affichage
 
   return (
     <nav className="navbar">
       <div className="logo">
-        <FaStore className="store-icon" />
-        {shop?.name || "Boutique"}
+        <Link to="/">
+          <img src={MaketuLogo} alt="Makétu Logo" />
+        </Link>
       </div>
 
-      {/* Barre de recherche */}
+      {/* Menu links desktop */}
+      <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
+        {menuLinks.map((link, index) => (
+          <li key={index}>
+            {link.to ? <Link to={link.to}>{link.label}</Link> : <a href={link.href}>{link.label}</a>}
+          </li>
+        ))}
+      </ul>
+
+      {/* Search bar */}
       <div className="search-bar">
-        <input type="text" placeholder="Rechercher un produit..." />
+        <input
+          type="text"
+          placeholder="Rechercher un produit..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <button>
           <FaSearch />
         </button>
       </div>
 
-      {/* Icônes */}
+      {/* Icons */}
       <div className="nav-icons">
-        <button className="cart-btn">
+        <button>
           <FaShoppingCart />
-          {/* <span className="cart-count">0</span> */}
         </button>
-        <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+        <button>
+          <FaUser />
+        </button>
+        <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>
           <FaBars />
         </button>
-        {menuOpen && (
-          <div className="dropdown-menu">
-            <a href="#">
-              <FaInfoCircle /> À propos
-            </a>
-            <a href="#">
-              <FaCog /> Paramètres
-            </a>
-            <a href="/login">
-              <FaUserCircle /> Gestion
-            </a>
-          </div>
-        )}
       </div>
     </nav>
   );
 };
 
-export default Navbar;
+export default NavbarShop;

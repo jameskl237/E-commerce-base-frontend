@@ -2,35 +2,38 @@ import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import "./AllProducts.scss";
 import Footer from "../../components/Accueil/Footer";
-
-// Import des icônes
-import {
-  FaSearch,
-  FaShoppingCart,
-  FaUser,
-  FaBars,
-  FaMobileAlt,
-  FaTshirt,
-  FaHome,
-  FaSpa,
-  FaCar,
-} from "react-icons/fa";
+import { API_BASE_URL } from "../../config/constants";
+import { Link } from 'react-router-dom';
+import NavbarShop from '../../components/Shop/NavbarShop';
+import Pagination from '../../components/Pagination';
 
 const AllProducts = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // Charger les produits au montage du composant
+  const ITEMS_PER_PAGE = 12;
+
+  const menuLinks = [
+    { label: "Catégories", href: "#" },
+    { label: "Boutiques", href: "/shops" },
+    { label: "Centre d’acheteurs", href: "#" },
+    { label: "Assistance", href: "#" },
+  ];
+
+  // Fetch all products once on component mount
   useEffect(() => {
-    api
-      .get("/products")
+    api.get("/products")
       .then((res) => {
-        // ⚠️ Vérifie si ton API retourne { data: [...] } ou juste [...]
-        setProducts(res.data.data || res.data);
+        const allData = res.data.data || res.data;
+        setAllProducts(allData);
         setLoading(false);
-        console.log("Produits reçus:", res.data.data || res.data);
       })
       .catch((err) => {
         console.error("Erreur lors du chargement des produits :", err);
@@ -39,79 +42,75 @@ const AllProducts = () => {
       });
   }, []);
 
+  // Fetch categories
+  useEffect(() => {
+    api.get("/categories")
+      .then(res => {
+        setCategories(res.data.data || res.data);
+      })
+      .catch(err => {
+        console.error("Erreur lors du chargement des catégories :", err);
+      });
+  }, []);
+
+  // Handle filtering and pagination on the client side
+  useEffect(() => {
+    let filteredData = allProducts;
+
+    // Apply category filter
+    if (selectedCategory) {
+      filteredData = filteredData.filter(product => product.category && product.category.id === parseInt(selectedCategory));
+    }
+
+    // Apply search filter
+    if (searchQuery) {
+      filteredData = filteredData.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Calculate total pages based on filtered data
+    setTotalPages(Math.ceil(filteredData.length / ITEMS_PER_PAGE));
+
+    // Slice the data for the current page
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    setProducts(filteredData.slice(startIndex, endIndex));
+
+  }, [currentPage, allProducts, selectedCategory, searchQuery]);
+
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="product-page">
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="logo">Makétu</div>
+      <NavbarShop searchQuery={searchQuery} setSearchQuery={setSearchQuery} menuLinks={menuLinks} />
 
-        {/* Menu links desktop */}
-        <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-          <li>
-            <a href="#">Catégories</a>
-          </li>
-          <li>
-            <a href="#">Fournisseurs</a>
-          </li>
-          <li>
-            <a href="#">Centre d’acheteurs</a>
-          </li>
-          <li>
-            <a href="#">Assistance</a>
-          </li>
-        </ul>
-
-        {/* Search bar */}
-        <div className="search-bar">
-          <input type="text" placeholder="Rechercher un produit..." />
-          <button>
-            <FaSearch />
-          </button>
-        </div>
-
-        {/* Icons */}
-        <div className="nav-icons">
-          <button>
-            <FaShoppingCart />
-          </button>
-          <button>
-            <FaUser />
-          </button>
-          <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>
-            <FaBars />
-          </button>
-        </div>
-      </nav>
-
-      {/* Hero */}
       <header className="hero-banner">
         <h1>Découvrez nos meilleures offres</h1>
         <p>Des produits de qualité à des prix compétitifs</p>
       </header>
 
-      {/* Categories menu */}
-      <section className="categories">
-        <h2>Catégories populaires</h2>
-        <div className="categories-grid">
-          <div className="cat-card">
-            <FaMobileAlt /> Électronique
-          </div>
-          <div className="cat-card">
-            <FaTshirt /> Mode
-          </div>
-          <div className="cat-card">
-            <FaHome /> Maison & Jardin
-          </div>
-          <div className="cat-card">
-            <FaSpa /> Beauté
-          </div>
-          <div className="cat-card">
-            <FaCar /> Automobile
-          </div>
-        </div>
+      <section className="categories-filter">
+        <h2>Filtrer par Catégorie</h2>
+        <select
+          value={selectedCategory}
+          onChange={(e) => {
+            setSelectedCategory(e.target.value);
+            setCurrentPage(1); // Reset to first page on filter change
+          }}
+          className="category-dropdown"
+        >
+          <option value="">Toutes les catégories</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
       </section>
 
-      {/* Produits */}
       <section className="products">
         <h2>Nos Produits</h2>
 
@@ -121,23 +120,28 @@ const AllProducts = () => {
         <div className="product-grid">
           {products.length > 0
             ? products.map((p) => (
-                <div className="product-card" key={p.id}>
-                  {/* ⚠️ Laravel doit retourner un champ "image_url" ou "image" */}
-                  <img
-                    src={
-                      p.medias?.length > 0
-                        ? p.medias[0].url || `/storage/${p.medias[0].file_path}`
-                        : "/src/assets/default.jpg"
-                    }
-                    alt={p.name}
-                  />
-                  <h3>{p.name}</h3>
-                  <p className="price">{p.price} FCFA</p>
-                  <button className="buy-btn">Ajouter au panier</button>
-                </div>
+                <Link to={`/product/${p.id}`} key={p.id} className="product-card-link">
+                  <div className="product-card">
+                    <img
+                      src={
+                        p.medias?.length > 0
+                          ? `${API_BASE_URL}/storage/${p.medias[0].url.replace(/^\//, '')}`
+                          : "/src/assets/default.jpg"
+                      }
+                      alt={p.name}
+                    />
+                    <h3>{p.name}</h3>
+                    <p className="price">{p.price} FCFA</p>
+                    <button className="buy-btn">Ajouter au panier</button>
+                  </div>
+                </Link>
               ))
-            : !loading && <p>Aucun produit disponible.</p>}
+            : !loading && <p>Aucun produit disponible pour les filtres sélectionnés.</p>}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        )}
       </section>
 
       <Footer />

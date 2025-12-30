@@ -1,63 +1,54 @@
-.product-page {
+.single-shop-page {
   font-family: "Poppins", sans-serif;
   color: #333;
 
-  /* HERO */
-  .hero-banner {
+  .shop-hero {
+   min-height: 45vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    padding: 2rem;
     text-align: center;
-    padding: 6rem 2rem;
+
+    /* Même esprit que la navbar */
     background: linear-gradient(135deg, #001f3f, #0074d9);
-    color: white;
+
+    position: relative;
+    overflow: hidden;
+
+    /* léger overlay pour élégance */
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    h1,
+    p {
+      position: relative;
+      z-index: 1;
+    }
 
     h1 {
       font-size: 3rem;
-      margin-bottom: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
     }
 
     p {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 850px;
+      line-height: 1.7;
     }
   }
 
-  /* CATEGORIES FILTER */
-  .categories-filter {
-    padding: 2rem 5%;
-    text-align: center;
-    background: #f0f2f5;
-    border-bottom: 1px solid #e0e0e0;
-
-    h2 {
-      margin-bottom: 1rem;
-      color: #001f3f;
-    }
-
-    .category-dropdown {
-      padding: 0.7rem 1.5rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background-color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.3s ease;
-
-      &:hover {
-        border-color: #0074d9;
-      }
-
-      &:focus {
-        border-color: #ff69b4;
-        box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
-      }
-    }
-  }
-
-  /* PRODUITS */
-  .products {
+  .shop-products {
     padding: 3rem 5%;
     text-align: center;
 
@@ -75,9 +66,7 @@
     .product-card-link {
       display: block;
       text-decoration: none;
-      color: inherit; /* Inherit color from parent or define as needed */
-      max-width: 280px; /* Limit the width of a single product card */
-      margin: 0 auto; /* Center the card if it's the only one */
+      color: inherit;
     }
 
     .product-card {
@@ -127,39 +116,6 @@
           background: #0074d9;
         }
       }
-    }
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 992px) {
-    .navbar {
-      flex-wrap: wrap;
-
-      .search-bar {
-        margin: 1rem 0;
-      }
-
-      .nav-icons .burger {
-        display: block;
-      }
-
-      .nav-links {
-        display: none;
-      }
-    }
-  }
-
-  @media (max-width: 576px) {
-    .hero-banner h1 {
-      font-size: 1.8rem;
-    }
-
-    .hero-banner p {
-      font-size: 1rem;
-    }
-
-    .product-card img {
-      height: 150px;
     }
   }
 }

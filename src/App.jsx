@@ -13,6 +13,8 @@ import PrivateRoute from "./auth/PrivateRoute";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ApiTest from "./components/ApiTest";
+import ProductShowPage from "./pages/Product/ProductShowPage"; // Import ProductShowPage
+import SingleShopPage from "./pages/Shop/SingleShopPage";
 
 export default function App() {
   return (
@@ -22,8 +24,10 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
-          <Route path="/shop/:shopId" element={<Shop />} />
+          <Route path="/shops" element={<Shop />} />
+          <Route path="/shop/:shopId/:shopName" element={<SingleShopPage />} />
           <Route path="/products" element={<AllProducts />} />
+          <Route path="/product/:productId" element={<ProductShowPage />} /> {/* New route for product show page */}
           <Route path="/test-api" element={<ApiTest />} />
           <Route path="/supplier/dashboard/:shopId" element={
             <PrivateRoute>
