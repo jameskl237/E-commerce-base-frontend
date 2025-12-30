@@ -1,0 +1,131 @@
+@use '../../styles/variables.scss' as *;
+// src/components/Shop/NavbarShop.scss
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  padding: 1rem 5%;
+  background: linear-gradient(135deg, #001f3f, #0074d9);
+  color: $light-color;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .logo {
+    a {
+      display: block;
+    }
+
+    img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+
+    li a {
+      color: $light-color;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s;
+
+      &:hover {
+        color: $accent-color;
+      }
+    }
+
+    &.active {
+      display: block;
+      position: absolute;
+      top: 70px;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(135deg, #001f3f, #0074d9);
+      text-align: center;
+      padding: 1rem 0;
+
+      li {
+        margin: 1rem 0;
+      }
+    }
+  }
+
+  .search-bar {
+    flex: 1;
+    margin: 0 2rem;
+    display: flex;
+
+    input {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 30px 0 0 30px;
+      outline: none;
+    }
+
+    button {
+      background: $accent-color;
+      border: none;
+      padding: 0 1rem;
+      border-radius: 0 30px 30px 0;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0074d9;
+      color: $light-color;
+    }
+  }
+
+  .nav-icons {
+    display: flex;
+    align-items: center;
+
+    button {
+      background: transparent;
+      border: none;
+      color: $light-color;
+      font-size: 1.3rem;
+      margin-left: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        color: $accent-color;
+      }
+    }
+
+    .burger {
+      display: none;
+      font-size: 1.6rem;
+    }
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .navbar {
+    flex-wrap: wrap;
+
+    .search-bar {
+      margin: 1rem 0;
+    }
+
+    .nav-icons .burger {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+    }
+  }
+}

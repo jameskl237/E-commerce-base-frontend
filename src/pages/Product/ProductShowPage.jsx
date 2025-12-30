@@ -1,53 +1,103 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import { API_BASE_URL } from '../../config/constants'; // Import the constant
+import { API_BASE_URL } from '../../config/constants';
+import './ProductShowPage.scss';
+import { FiArrowLeft, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const ProductShowPage = () => {
   const { productId } = useParams();
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get(`/products/${productId}`);
-        setProduct(response.data.data); // Assuming API returns { data: product_object }
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching product:", err);
-        setError("Failed to load product details.");
-        setLoading(false);
-      }
+      const res = await api.get(`/products/${productId}`);
+      setProduct(res.data.data);
+      console.log("Product supplier shop name:", res.data.data.shop?.user?.name);
+      setLoading(false);
     };
-
     fetchProduct();
   }, [productId]);
 
-  if (loading) return <p>Loading product...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
-  if (!product) return <p>Product not found.</p>;
+  if (loading) return <p>Chargement...</p>;
+  if (!product) return <p>Produit introuvable</p>;
+
+  const images =
+    product.medias?.map(
+      m => `${API_BASE_URL}/storage/${m.url.replace(/^\//, '')}`
+    ) || [];
+
+  const nextImage = () =>
+    setCurrentIndex((currentIndex + 1) % images.length);
+
+  const prevImage = () =>
+    setCurrentIndex(
+      (currentIndex - 1 + images.length) % images.length
+    );
 
   return (
     <div className="product-show-page">
-      <h1>{product.name}</h1>
-      {product.medias && product.medias.length > 0 && (
-        <img
-          src={product.medias[0].url || `${API_BASE_URL}/storage/${product.medias[0].file_path}`}
-          alt={product.name}
-          style={{ maxWidth: '400px', height: 'auto' }}
-        />
-      )}
-      <p>Price: {product.price} FCFA</p>
-      <p>Description: {product.description}</p>
-      <p>Long Description: {product.long_description}</p>
-      <p>Quantity: {product.quantity}</p>
-      <p>In Stock: {product.in_stock ? 'Yes' : 'No'}</p>
-      <p>Origin: {product.origin}</p>
-      <p>Category: {product.category?.name || 'N/A'}</p>
-      {/* Add more product details as needed */}
+      <button className="back-button" onClick={() => navigate(-1)}>
+        <FiArrowLeft /> Retour
+      </button>
+
+      <div className="product-layout">
+        {/* ===== IMAGE BLOCK ===== */}
+        <div className="image-block">
+          <div className="carousel">
+            <button onClick={prevImage} className="nav left">
+              <FiChevronLeft />
+            </button>
+
+            <img src={images[currentIndex]} alt={product.name} />
+
+            <button onClick={nextImage} className="nav right">
+              <FiChevronRight />
+            </button>
+          </div>
+
+          <div className="dots">
+            {images.map((_, index) => (
+              <span
+                key={index}
+                className={index === currentIndex ? 'active' : ''}
+                onClick={() => setCurrentIndex(index)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ===== INFO BLOCK ===== */}
+        <div className="info-block">
+          <h1>{product.name}</h1>
+          <p className="price">{product.price} FCFA</p>
+
+          <p className="description">{product.description}</p>
+
+          <div className="meta">
+            <span><strong>Stock :</strong> {product.in_stock ? 'Disponible' : 'Rupture'}</span>
+            <span><strong>Quantité :</strong> {product.quantity}</span>
+            <span><strong>Origine :</strong> {product.origin}</span>
+            <span><strong>Catégorie :</strong> {product.category?.name}</span>
+            <span><strong>Boutique :</strong> {product.shop?.name}</span>
+            <span><strong>Fournisseur :</strong> {product.shop.user?.name}</span>
+          </div>
+
+          <div className="actions">
+            <button className="cart">Ajouter au panier</button>
+            <button className="buy">Acheter maintenant</button>
+          </div>
+
+          <div className="details">
+            <h2>Description détaillée</h2>
+            <p>{product.long_description}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

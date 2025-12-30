@@ -1,3 +1,4 @@
+@use '../../styles/variables.scss' as *;
 /* Import de la police artistique pour Makétu */
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
@@ -8,9 +9,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #0b2545; // Bleu marine
+  background: linear-gradient(135deg, #001f3f, #0074d9); // Bleu marine
   padding: 10px 20px;
-  color: white;
+  color: $light-color;
   font-family: 'Roboto', sans-serif;
 
   .logo {
@@ -20,7 +21,7 @@
     .logo-text {
       font-size: 26px;
       font-weight: bold;
-      color: white;
+      color: $light-color;
       text-decoration: none;
 
       /* Style spécial pour Makétu */
@@ -41,12 +42,12 @@
 
     a {
       text-decoration: none;
-      color: white;
+      color: $light-color;
       font-weight: 500;
       transition: color 0.3s;
 
       &:hover {
-        color: #00ff88;
+        color: $accent-color;
       }
     }
   }
