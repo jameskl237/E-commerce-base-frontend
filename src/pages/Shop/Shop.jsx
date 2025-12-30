@@ -1,69 +1,116 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import api from "../../services/api";
-import Navbar from "../../components/Shop/NavbarShop";
-import Banner from "../../components/Shop/BannerShop";
-import CategoryFilter from "../../components/Shop/CategoryFilter";
-import ProductGrid from "../../components/Shop/ProductGrid";
-import Footer from "../../components/Shop/Footer";
+import NavbarShop from "../../components/Shop/NavbarShop";
+import Footer from "../../components/Accueil/Footer";
+import { Link } from 'react-router-dom';
 import "./Shop.scss";
+import Pagination from '../../components/Pagination';
+import { FaStore } from 'react-icons/fa'; // Import FaStore
 
-const ShopPage = () => {
-  const { shopId } = useParams();
-  // const { shopId } = 1;
-  const [shop, setShop] = useState(null);
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+const Shop = () => {
+  const [allShops, setAllShops] = useState([]);
+  const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
+  const ITEMS_PER_PAGE = 10; // Changed to 10 for consistency with products
+
+  const menuLinks = [
+    { label: "Accueil", href: "/products" },
+    { label: "Boutiques", href: "/shops" },
+    { label: "Centre d’acheteurs", href: "#" },
+    { label: "Assistance", href: "#" },
+  ];
+
+  // Fetch all shops once on component mount
   useEffect(() => {
-    api
-      .get(`/shops/${shopId}`)
-      .then((res) => {
-        const shopData = res.data.shop || res.data;
-        const productsData = res.data.products || shopData.products || [];
-        setShop(shopData);
-        setProducts(productsData);
-
-        // Extraire les catégories uniques
-        const uniqueCategories = [
-          ...new Map(
-            productsData.map((p) => [p.category?.id, p.category])
-          ).values(),
-        ].filter(Boolean);
-        setCategories(uniqueCategories);
-
+    api.get("/shops")
+      .then(res => {
+        const allData = res.data.data || res.data;
+        setAllShops(allData);
         setLoading(false);
       })
-      .catch(() => {
-        setError("Impossible de charger la boutique.");
+      .catch(err => {
+        console.error("Erreur lors du chargement des boutiques :", err);
+        setError("Impossible de charger les boutiques.");
         setLoading(false);
       });
-  }, [shopId]);
+  }, []);
 
-  const filteredProducts =
-    selectedCategory === "all"
-      ? products
-      : products.filter((p) => p.category?.id === parseInt(selectedCategory));
+  // Handle filtering and pagination on the client side
+  useEffect(() => {
+    let filteredData = allShops;
+
+    // Apply search filter
+    if (searchQuery) {
+      filteredData = filteredData.filter(shop =>
+        shop.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (shop.description && shop.description.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    }
+
+    // Calculate total pages based on filtered data
+    setTotalPages(Math.ceil(filteredData.length / ITEMS_PER_PAGE));
+
+    // Slice the data for the current page
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    setShops(filteredData.slice(startIndex, endIndex));
+
+  }, [currentPage, allShops, searchQuery]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
-    <div className="shop-page">
-      <Navbar shop={shop} />
-      <Banner shop={shop} />
-      <CategoryFilter
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
+    <div className="shops-all-page">
+      <NavbarShop
+        searchQuery={searchQuery}
+        setSearchQuery={(query) => {
+          setSearchQuery(query);
+          setCurrentPage(1); // Reset to first page on search
+        }}
+        menuLinks={menuLinks}
       />
-      <section className="products">
-        <h2>Nos Produits</h2>
-        <ProductGrid loading={loading} error={error} products={filteredProducts} />
+
+      <header className="hero-banner">
+        <h1>Découvrez nos Boutiques</h1>
+        <p>Explorez une variété de magasins et leurs produits</p>
+      </header>
+
+      <section className="shops-list-section">
+        <h2>Toutes nos Boutiques</h2>
+        {loading && <p>Chargement des boutiques...</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        
+        <div className="shops-grid">
+          {shops.length > 0 ? (
+            shops.map(shop => (
+              <Link to={`/shop/${shop.id}/${encodeURIComponent(shop.name)}`} key={shop.id} className="shop-card-link">
+                <div className="shop-card">
+                  <FaStore className="shop-icon" />
+                  <h3>{shop.name}</h3>
+                  <p>{shop.description}</p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            !loading && <p>Aucune boutique disponible pour cette recherche.</p>
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        )}
       </section>
-      <Footer shop={shop} />
+
+      <Footer />
     </div>
   );
 };
 
-export default ShopPage;
+export default Shop;

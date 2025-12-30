@@ -13,13 +13,16 @@ const api = axios.create({
 });
 
 // Attacher token automatiquement si présent
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => Promise.reject(error));
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Optionnel : interceptor response pour gérer 401 / refresh token
 api.interceptors.response.use(
@@ -29,5 +32,12 @@ api.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+
+// Récupérer le cookie CSRF
+export async function getCsrfCookie() {
+  return await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+    withCredentials: true,
+  });
+}
 
 export default api;

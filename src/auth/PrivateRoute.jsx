@@ -1,7 +1,7 @@
 // src/auth/PrivateRoute.jsx
 import React from "react";
 import { Navigate } from "react-router-dom";
-import useAuth from "./useAuth";
+import {useAuth} from "./useAuth";
 
 export default function PrivateRoute({ children, roles = [] }) {
   const { user, loading } = useAuth();

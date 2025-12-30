@@ -1,7 +1,9 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from "react";
-import useAuth from "../../auth/useAuth"; // ⚠️ décommente pour activer l'auth
+import { toast } from "react-toastify";
+import {useAuth} from "../../auth/useAuth"; // ⚠️ décommente pour activer l'auth
 import { useNavigate, Link } from "react-router-dom";
+
 import "../../styles/auth.scss";
 
 export default function Login() {
@@ -18,10 +20,13 @@ export default function Login() {
     setSubmitting(true);
     try {
       const user = await login(email, password);
+      toast.success("Connexion réussie !");
       if (user.role === "administrator") navigate("/admin/dashboard");
-      else navigate("/supplier/dashboard");
+      else navigate("/supplier/shops/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Échec de l'authentification");
+      const errorMessage = err.response?.data?.message || "Échec de l'authentification";
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setSubmitting(false);
     }
@@ -31,7 +36,6 @@ export default function Login() {
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
         <h2>Connexion</h2>
-        {error && <div className="alert">{error}</div>}
 
         <label>Email
           <input

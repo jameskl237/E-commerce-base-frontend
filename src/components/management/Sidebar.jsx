@@ -1,12 +1,11 @@
-// src/components/Sidebar.jsx
 import React from "react";
-import useAuth from "../auth/useAuth";
+import useAuth from "../../auth/useAuth";
 import "./Sidebar.scss";
 import { NavLink } from "react-router-dom";
 
 const items = {
   administrator: [
-    { to: "/admin/dashboard", label: "Tableau de bord" },
+    // { to: "/admin/dashboard", label: "Tableau de bord" },
     { to: "/admin/suppliers", label: "Fournisseurs" },
     { to: "/admin/stores", label: "Boutiques" },
     { to: "/admin/products", label: "Produits" },
@@ -14,29 +13,34 @@ const items = {
     { to: "/admin/settings", label: "Paramètres" },
   ],
   supplier: [
-    { to: "/supplier/dashboard", label: "Tableau de bord" },
-    { to: "/supplier/products", label: "Mes produits" },
+    // { to: "/supplier/dashboard", label: "Tableau de bord" },
+    { to: "/supplier/shops/dashboard", label: "Mes Boutiques" },
     { to: "/supplier/orders", label: "Mes commandes" },
     { to: "/supplier/store", label: "Ma boutique" },
   ],
 };
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, closeSidebar, navHeight }) {
   const { user } = useAuth();
   const role = user?.role || "supplier";
   const list = items[role] || [];
 
   return (
-    <aside className="sidebar">
+    <aside
+      className={`sidebar ${isOpen ? "open" : ""}`}
+      style={{ top: navHeight ? `${navHeight}px` : "60px", height: `calc(100vh - ${navHeight}px)` }}
+    >
       <nav>
         <ul>
           {list.map(i => (
             <li key={i.to}>
-              <NavLink to={i.to} className={({isActive}) => isActive ? "active" : ""}>{i.label}</NavLink>
+              <NavLink to={i.to} className={({ isActive }) => isActive ? "active" : ""}>{i.label}</NavLink>
             </li>
           ))}
         </ul>
       </nav>
+      {isOpen && <div className="overlay" onClick={closeSidebar}></div>}
     </aside>
   );
 }
+

@@ -5,13 +5,13 @@
   .hero {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 3rem 5%;
     background: linear-gradient(135deg, #001f3f, #0074d9);
     color: white;
+    text-align: center;
 
     .hero-content {
-      max-width: 50%;
 
       h1 {
         font-size: 3rem;

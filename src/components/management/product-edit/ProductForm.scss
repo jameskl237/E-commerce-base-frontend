@@ -1,0 +1,153 @@
+@use "sass:color";
+@use '../../../styles/variables.scss' as *;
+
+.product-form {
+  padding: 2.5rem 3rem; // Augmentation du padding
+  background-color: $white;
+  border-radius: 12px; // Bords plus arrondis
+  box-shadow: $shadow; // Utilisation de la variable shadow globale
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; // Add transition
+
+  h2 {
+    font-size: 1.75rem; // Titre plus grand
+    margin-bottom: 2rem; // Plus d'espace en dessous
+    color: $gray-dark;
+    font-weight: 600;
+    transition: color 0.3s ease; // Add transition
+  }
+
+  .form-group {
+    margin-bottom: 1.75rem; // Plus d'espace entre les groupes
+
+    label {
+      display: block;
+      margin-bottom: 0.75rem; // Plus d'espace sous le label
+      font-weight: 600; // Labels plus gras
+      color: #444;
+      font-size: 1rem;
+      transition: color 0.3s ease; // Add transition
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.85rem 1.1rem; // Inputs plus aérés
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: #fdfdfd;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease; // Update transition
+
+      &:focus {
+        outline: none;
+        border-color: color.adjust($primary-color, $lightness: -10%);
+        box-shadow: 0 0 0 4px rgba(color.adjust($primary-color, $lightness: -10%), 0.1);
+      }
+    }
+    // ...
+  }
+  // ...
+}
+
+// Dark Mode Styles
+.dashboard.dark {
+  .product-form {
+    background-color: $dark-card-background;
+    box-shadow: $dark-shadow;
+
+    h2 {
+      color: $dark-text-color;
+    }
+
+    .form-group {
+      label {
+        color: $dark-secondary-text-color;
+      }
+
+      input,
+      textarea,
+      select { // Ajout de 'select' ici pour la cohérence
+        background-color: $dark-input-background;
+        border-color: $dark-input-border;
+        color: $dark-text-color;
+        
+        &::placeholder { // Assure que le placeholder change aussi de couleur
+            color: $dark-secondary-text-color;
+        }
+
+        &:focus {
+          border-color: color.adjust($dark-input-border, $lightness: 10%);
+          box-shadow: 0 0 0 4px rgba(color.adjust($dark-input-border, $lightness: 10%), 0.2);
+        }
+      }
+    }
+
+    // Styles mode sombre pour la section d'upload de fichiers
+    .file-upload-section {
+      background-color: $dark-input-background;
+      border: 1px dashed $dark-input-border;
+      
+      .file-upload-label {
+        color: $dark-secondary-text-color;
+        .upload-icon { // Assuming upload-icon is within the label
+          color: $dark-secondary-text-color;
+        }
+      }
+      .file-info {
+        color: $dark-secondary-text-color;
+      }
+    }
+
+    .files-preview {
+      h4 {
+        color: $dark-text-color;
+      }
+      .files-grid {
+        .file-item {
+          background-color: $dark-card-background; // Couleur de fond pour chaque fichier
+          border: 1px solid $dark-input-border;
+          .file-info {
+            .file-icon, .file-name {
+              color: $dark-text-color;
+            }
+          }
+          .remove-file-btn {
+            color: $dark-text-color;
+            background-color: transparent;
+            &:hover {
+              color: $accent-color; // Couleur d'accent pour la suppression
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.btn-submit {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: $gradient-main;
+  color: $white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .product-form {
+    padding: 2rem;
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+}
