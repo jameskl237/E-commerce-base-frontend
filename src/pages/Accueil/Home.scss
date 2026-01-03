@@ -1,3 +1,5 @@
+@use '../../styles/variables' as *;
+
 .home {
   font-family: "Poppins", sans-serif;
 
@@ -5,13 +7,14 @@
   .hero {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 3rem 5%;
-    background: linear-gradient(135deg, #001f3f, #0074d9);
+    background: $gradient-main;
     color: white;
-    text-align: center;
+    gap: 4rem; // Added gap for spacing between content and image
 
     .hero-content {
+      text-align: left; // Explicitly set text alignment for content
 
       h1 {
         font-size: 3rem;
@@ -151,6 +154,7 @@
       text-align: center;
 
       .hero-content {
+        text-align: center; // Added for tablet view
         max-width: 100%;
         h1 {
           font-size: 2.5rem;

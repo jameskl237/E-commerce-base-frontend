@@ -1,3 +1,5 @@
+@use '../../styles/variables' as *;
+
 .product-page {
   font-family: "Poppins", sans-serif;
   color: #333;
@@ -10,7 +12,7 @@
     align-items: center;
     text-align: center;
     padding: 6rem 2rem;
-    background: linear-gradient(135deg, #001f3f, #0074d9);
+    background: $gradient-main;
     color: white;
 
     h1 {

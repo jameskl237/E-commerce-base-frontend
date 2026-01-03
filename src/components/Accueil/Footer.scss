@@ -1,7 +1,7 @@
 @use '../../styles/variables.scss' as *;
 
 .footer {
-  background: linear-gradient(135deg, #001f3f, #0074d9);
+  background: $gradient-main;
   color: $light-color;
   padding: 40px 20px 20px;
   font-size: 0.95rem;

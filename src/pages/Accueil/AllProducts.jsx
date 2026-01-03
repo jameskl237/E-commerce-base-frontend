@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../../config/constants";
 import { Link } from 'react-router-dom';
 import NavbarShop from '../../components/Shop/NavbarShop';
 import Pagination from '../../components/Pagination';
+import { useCart } from "../../context/CartContext";
 
 const AllProducts = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -17,6 +18,7 @@ const AllProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const { addToCart } = useCart();
 
   const ITEMS_PER_PAGE = 12;
 
@@ -85,6 +87,12 @@ const AllProducts = () => {
     setCurrentPage(page);
   };
 
+  const handleAddToCart = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product);
+  }
+
   return (
     <div className="product-page">
       <NavbarShop searchQuery={searchQuery} setSearchQuery={setSearchQuery} menuLinks={menuLinks} />
@@ -132,7 +140,7 @@ const AllProducts = () => {
                     />
                     <h3>{p.name}</h3>
                     <p className="price">{p.price} FCFA</p>
-                    <button className="buy-btn">Ajouter au panier</button>
+                    <button className="buy-btn" onClick={(e) => handleAddToCart(e, p)}>Ajouter au panier</button>
                   </div>
                 </Link>
               ))

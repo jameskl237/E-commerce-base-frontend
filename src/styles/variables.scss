@@ -3,17 +3,17 @@ $primary-color: #0a3d62; // Bleu marine
 $secondary-color: #74b9ff; // Bleu ciel
 $accent-color: #ff6b81; // Rose
 $light-color: #ffffff; // Blanc
+$dark-color: #333333; // Couleur de texte foncée
+$danger-color: #dc3545; // Rouge pour les actions dangereuses ou les erreurs
+$success-color: #28a745; // Vert pour les actions réussies ou les confirmations
+$tertiary-color: #00ff88; // Vert vif
+$auth-page-background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+$input-border-color: #e6eefc;
+$alert-background-color: #ffeef6;
+$google-btn-hover-background: #f8f9fa;
 
 // 🖋 Typographie
 $font-main: 'Arial', sans-serif;
-// src/styles/_variables.scss
-
-// Couleurs principales
-$blue: #0b5ed7;
-$white: #ffffff;
-$pink: #ff66a3;
-$gradient-main: linear-gradient(90deg, #003bb0, #ff00ff); // bleu → rose
-
 
 // Hauteur de la barre de navigation
 $nav-height: 64px;
@@ -22,6 +22,7 @@ $nav-height: 64px;
 $gray-light: #f5f7fa;
 $gray-dark: #333333;
 $shadow: 0 6px 24px rgba(0,0,0,0.08);
+$gradient-main: linear-gradient(90deg, #007bff, #ff00ff);
 
 // --- Dark Mode Variables ---
 $dark-background: #1a1a2e; // Dark background for the page

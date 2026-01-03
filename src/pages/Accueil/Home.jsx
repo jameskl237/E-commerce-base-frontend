@@ -13,7 +13,7 @@ const Home = () => {
             Bienvenue chez <span>Makétu</span>
           </h1>
           <p>
-            La plateforme e-commerce moderne qui connecte les vendeurs et les
+            La plateforme de commerce en ligne  moderne qui connecte les vendeurs et les
             clients facilement et rapidement.
           </p>
           <Link to="/products" className="cta-btn">
@@ -22,7 +22,7 @@ const Home = () => {
         </div>
         <div className="hero-image">
           <div className="logo-wrapper">
-            <img src="/src/assets/Maketu_logo.png" alt="Makétu logo" />
+            <img src="/src/assets/Maketu1.jpeg" alt="Makétu logo" />
           </div>
         </div>
       </section>
@@ -31,7 +31,7 @@ const Home = () => {
       <section className="about">
         <h2>Pourquoi choisir Makétu ?</h2>
         <p>
-          Makétu révolutionne le e-commerce en offrant une plateforme simple,
+          Makétu révolutionne le commerceen ligne en offrant une plateforme simple,
           moderne et sécurisée. Que vous soyez vendeur ou acheteur, notre
           objectif est de rendre vos transactions fluides et agréables.
         </p>

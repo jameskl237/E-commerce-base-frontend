@@ -2,14 +2,14 @@
 
 .sidebar {
   width: 235px;
-  background: #007bff; // bleu uniforme
-  color: $white;
+  background: $primary-color; // bleu uniforme
+  color: $light-color;
   padding: 1rem;
   position: fixed;
   left: 0;
   transition: transform 0.3s ease;
   z-index: 1000;
-  border: 1px solid #fff;
+  border: 1px solid $light-color;
 
   ul {
     list-style: none;
@@ -27,13 +27,13 @@
         text-decoration: none;
 
         &:hover {
-          background: rgba($white, 0.1);
+          background: rgba($light-color, 0.1);
         }
       }
 
       .active {
         background: $gradient-main;
-        color: $white;
+        color: $light-color;
       }
     }
   }
@@ -43,7 +43,7 @@
   position: fixed;
   left: 0;
   width: 100%;
-  background: #007bff;
+  background: $primary-color;
   z-index: 999;
 }
 

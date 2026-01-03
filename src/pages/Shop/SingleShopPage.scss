@@ -1,3 +1,5 @@
+@use '../../styles/variables' as *;
+
 .single-shop-page {
   font-family: "Poppins", sans-serif;
   color: #333;
@@ -13,7 +15,7 @@
     text-align: center;
 
     /* Même esprit que la navbar */
-    background: linear-gradient(135deg, #001f3f, #0074d9);
+    background: $gradient-main;
 
     position: relative;
     overflow: hidden;

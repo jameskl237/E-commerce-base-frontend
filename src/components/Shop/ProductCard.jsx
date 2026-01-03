@@ -1,9 +1,12 @@
 import React from "react";
+import { useCart } from "../../context/CartContext";
 
 // L'URL de base de votre backend.
 const API_BASE_URL = 'http://localhost:8000';
 
 const ProductCard = ({ product }) => {
+  const { addToCart } = useCart();
+
   // Fonction pour trouver l'URL de l'image principale.
   const getPrincipalImageUrl = () => {
     if (product && Array.isArray(product.medias) && product.medias.length > 0) {
@@ -43,7 +46,7 @@ const ProductCard = ({ product }) => {
         <p className="product-description">{product.description}</p>
         <p className="price">{product.price} FCFA</p>
         <div className="product-actions">
-          <button className="buy-btn">Ajouter au panier</button>
+          <button className="buy-btn" onClick={() => addToCart(product)}>Ajouter au panier</button>
           <button className="details-btn">Détails</button>
         </div>
       </div>
