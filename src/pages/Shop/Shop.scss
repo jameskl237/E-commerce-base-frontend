@@ -1,4 +1,5 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .shops-all-page {
   font-family: "Poppins", sans-serif;
@@ -101,7 +102,7 @@
   }
 
   /* RESPONSIVE DESIGN */
-  @media (max-width: 768px) {
+  @include responsive(md) {
     .shops-list-section {
       .shops-grid {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -110,7 +111,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @include responsive(sm) {
     .shops-list-section {
       .shops-grid {
         grid-template-columns: 1fr; /* Single column on very small screens */

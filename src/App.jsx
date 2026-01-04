@@ -7,6 +7,7 @@ import Login from "./pages/management/Login";
 import SupplierDashboard from "./pages/management/supplier/SupplierManagement";
 import ShopsDashboard from "./pages/management/supplier/ShopsDashboard";
 import ProductEditPage from "./pages/management/supplier/product-edit/ProductEditPage"; // Import de la nouvelle page
+import AdminDashboard from "./pages/management/admin/AdminDashboard";
 import { AuthProvider } from "./auth/AuthProvider";
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -41,7 +42,7 @@ export default function App() {
                 </PrivateRoute>
               } />
 
-              <Route path="supplier/Shops/dashboard" element={
+              <Route path="/supplier/shops/dashboard" element={
                 <PrivateRoute>
                   <ShopsDashboard />
                 </PrivateRoute>
@@ -50,6 +51,12 @@ export default function App() {
               <Route path="/supplier/product/edit/:productId" element={
                 <PrivateRoute>
                   <ProductEditPage />
+                </PrivateRoute>
+              } />
+
+              <Route path="/admin/dashboard" element={
+                <PrivateRoute>
+                  <AdminDashboard />
                 </PrivateRoute>
               } />
 

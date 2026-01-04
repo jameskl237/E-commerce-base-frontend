@@ -20,9 +20,15 @@ export default function Login() {
     setSubmitting(true);
     try {
       const user = await login(email, password);
+      console.log('Login successful, user role:', user.role);
       toast.success("Connexion réussie !");
-      if (user.role === "administrator") navigate("/admin/dashboard");
-      else navigate("/supplier/shops/dashboard");
+      if (user.role === "admin") {
+        console.log('Navigating to admin dashboard, user role:', user.role);
+        navigate("/admin/dashboard");
+      } else {
+        console.log('Navigating to supplier dashboard, user role:', user.role);
+        navigate("/supplier/shops/dashboard");
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Échec de l'authentification";
       toast.error(errorMessage);

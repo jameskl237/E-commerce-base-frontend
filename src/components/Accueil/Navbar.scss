@@ -1,4 +1,5 @@
 @use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
 /* Import de la police artistique pour Makétu */
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
@@ -13,6 +14,57 @@
   padding: 10px 20px;
   color: $light-color;
   font-family: 'Roboto', sans-serif;
+  flex-wrap: wrap; // Allow items to wrap
+
+  @include responsive(md) {
+    // On smaller screens, allow navbar to stack
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px; // Adjust padding for smaller screens
+  }
+
+  @include responsive(sm) {
+    /* garder les éléments sur une seule ligne sur smartphone */
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+
+    .logo-container {
+      margin-right: 8px;
+      .maketu { font-size: 28px; } /* optionnel : réduire légèrement le logo texte */
+    }
+
+    /* barre de recherche : reste sur la même ligne mais se réduit */
+    .search-box {
+      display: flex;
+      flex: 1 1 auto;        // peut rétrécir et grandir
+      max-width: 55%;        // limite la largeur sur petits écrans
+      min-width: 120px;      // garde une largeur utilisable
+      margin: 0 8px;
+      align-items: center;
+    }
+
+    /* liens/menu : s'adaptent sans forcer la search box en dessous */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      li a, li .cart-link {
+        padding: 6px 8px;
+        font-size: 0.95rem;
+      }
+    }
+
+    /* icône de menu : reste visible mais positionnée de manière non absolue */
+    .menu-icon {
+      position: relative;
+      right: auto;
+      top: auto;
+      margin-left: 6px;
+    }
+  }
 
   .logo-container {
     .logo-link {
@@ -43,7 +95,7 @@
       font-size: 34px;
       font-weight: normal;
       letter-spacing: 1px;
-      color: $tertiary-color; // Vert vif
+      color: $accent-color; // Vert vif
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
   }
@@ -52,6 +104,19 @@
     display: flex;
     list-style: none;
     gap: 20px;
+    padding-right: 12px; // Ajoute de l'espace entre les liens et le bord droit
+
+    @include responsive(md) {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      display: none; // Hidden by default on small screens
+      &.active {
+        display: flex; // Display when active
+      }
+    }
 
     li {
       a {
@@ -70,6 +135,7 @@
         display: flex;
         align-items: center;
         gap: 5px;
+        margin-right: 12px; // espace spécifique pour l'icône panier
 
         .cart-count {
           background-color: $accent-color;
@@ -82,4 +148,74 @@
       }
     }
   }
+
+  .menu-icon {
+    display: none; // Hidden by default on larger screens
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: $light-color;
+
+    @include responsive(md) {
+      display: block; // Visible on medium and smaller screens
+      position: absolute; // Position it
+      right: 15px; // Adjust as needed
+      top: 15px; // Adjust as needed
+    }
+  }
 }
+.navbar {
+  position: relative;
+}
+
+/* MENU MOBILE */
+@include responsive(md) {
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: $gradient-main;
+    padding: 1.5rem 0;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+
+    display: none;
+
+    &.active {
+      display: flex;
+      animation: slideDown 0.3s ease;
+    }
+
+    li {
+      width: 100%;
+      text-align: center;
+
+      a,
+      .cart-link {
+        display: block;
+        width: 100%;
+        padding: 0.8rem 0;
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}
+
+/* Animation douce */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

@@ -1,4 +1,5 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .home {
   font-family: "Poppins", sans-serif;
@@ -148,7 +149,7 @@
   /* ================== RESPONSIVE ================== */
 
   /* Tablettes */
-  @media (max-width: 992px) {
+  @include responsive(lg) {
     .hero {
       flex-direction: column;
       text-align: center;
@@ -173,7 +174,7 @@
   }
 
   /* Smartphones */
-  @media (max-width: 576px) {
+  @include responsive(sm) {
     .hero {
       padding: 2rem 1rem;
 
