@@ -3,7 +3,7 @@
 
 .product-form {
   padding: 2.5rem 3rem; // Augmentation du padding
-  background-color: $white;
+  background-color: $light-color;
   border-radius: 12px; // Bords plus arrondis
   box-shadow: $shadow; // Utilisation de la variable shadow globale
   transition: background-color 0.3s ease, box-shadow 0.3s ease; // Add transition
@@ -23,7 +23,7 @@
       display: block;
       margin-bottom: 0.75rem; // Plus d'espace sous le label
       font-weight: 600; // Labels plus gras
-      color: #444;
+      color: $dark-color;
       font-size: 1rem;
       transition: color 0.3s ease; // Add transition
     }
@@ -32,7 +32,7 @@
     textarea {
       width: 100%;
       padding: 0.85rem 1.1rem; // Inputs plus aérés
-      border: 1px solid #ccc;
+      border: 1px solid $input-border-color;
       border-radius: 8px;
       font-size: 1rem;
       background-color: #fdfdfd;
@@ -129,7 +129,7 @@
   border: none;
   border-radius: 8px;
   background: $gradient-main;
-  color: $white;
+  color: $light-color;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;

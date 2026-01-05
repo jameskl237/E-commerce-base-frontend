@@ -6,9 +6,11 @@ import Footer from '../../components/Accueil/Footer';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../../config/constants';
 import Pagination from '../../components/Pagination';
+import { useCart } from '../../context/CartContext';
 import './SingleShopPage.scss';
 
 const SingleShopPage = () => {
+  const { addToCart } = useCart();
   const { shopId } = useParams();
   const [shop, setShop] = useState(null);
   const [allProducts, setAllProducts] = useState([]);
@@ -89,7 +91,6 @@ const SingleShopPage = () => {
         <div className="product-grid">
           {products.length > 0 ? (
             products.map(p => {
-              console.log("Product data (p):", p); // Added console log
               return (
                 <Link to={`/product/${p.id}`} key={p.id} className="product-card-link">
                 <div className="product-card">
@@ -103,7 +104,7 @@ const SingleShopPage = () => {
                   />
                   <h3>{p.name}</h3>
                   <p className="price">{p.price} FCFA</p>
-                  <button className="buy-btn">Ajouter au panier</button>
+                  <button className="buy-btn" onClick={(e) => {e.preventDefault(); addToCart(p);}}>Ajouter au panier</button>
                 </div>
               </Link>
               )

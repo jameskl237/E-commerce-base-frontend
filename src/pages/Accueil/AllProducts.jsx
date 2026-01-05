@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../../config/constants";
 import { Link } from 'react-router-dom';
 import NavbarShop from '../../components/Shop/NavbarShop';
 import Pagination from '../../components/Pagination';
+import { useCart } from "../../context/CartContext";
 
 const AllProducts = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -17,13 +18,14 @@ const AllProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const { addToCart } = useCart();
 
   const ITEMS_PER_PAGE = 12;
 
   const menuLinks = [
-    { label: "Catégories", href: "#" },
+    // { label: "Catégories", href: "#" },
     { label: "Boutiques", href: "/shops" },
-    { label: "Centre d’acheteurs", href: "#" },
+    // { label: "Centre d’acheteurs", href: "#" },
     { label: "Assistance", href: "#" },
   ];
 
@@ -46,7 +48,12 @@ const AllProducts = () => {
   useEffect(() => {
     api.get("/categories")
       .then(res => {
-        setCategories(res.data.data || res.data);
+        const cats = res.data.data || res.data;
+        if (Array.isArray(cats)) {
+          setCategories(cats);
+        } else {
+          console.error("La réponse de l'API /categories n'est pas un tableau:", cats);
+        }
       })
       .catch(err => {
         console.error("Erreur lors du chargement des catégories :", err);
@@ -55,7 +62,8 @@ const AllProducts = () => {
 
   // Handle filtering and pagination on the client side
   useEffect(() => {
-    let filteredData = allProducts;
+    // Ensure allProducts is an array before filtering
+    let filteredData = Array.isArray(allProducts) ? [...allProducts] : [];
 
     // Apply category filter
     if (selectedCategory) {
@@ -84,6 +92,12 @@ const AllProducts = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const handleAddToCart = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product);
+  }
 
   return (
     <div className="product-page">
@@ -132,7 +146,7 @@ const AllProducts = () => {
                     />
                     <h3>{p.name}</h3>
                     <p className="price">{p.price} FCFA</p>
-                    <button className="buy-btn">Ajouter au panier</button>
+                    <button className="buy-btn" onClick={(e) => handleAddToCart(e, p)}>Ajouter au panier</button>
                   </div>
                 </Link>
               ))

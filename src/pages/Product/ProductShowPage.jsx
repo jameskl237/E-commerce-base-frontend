@@ -3,9 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { API_BASE_URL } from '../../config/constants';
 import './ProductShowPage.scss';
+import { useCart } from '../../context/CartContext';
 import { FiArrowLeft, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const ProductShowPage = () => {
+  const { addToCart } = useCart();
   const { productId } = useParams();
   const navigate = useNavigate();
 
@@ -17,7 +19,6 @@ const ProductShowPage = () => {
     const fetchProduct = async () => {
       const res = await api.get(`/products/${productId}`);
       setProduct(res.data.data);
-      console.log("Product supplier shop name:", res.data.data.shop?.user?.name);
       setLoading(false);
     };
     fetchProduct();
@@ -88,7 +89,7 @@ const ProductShowPage = () => {
           </div>
 
           <div className="actions">
-            <button className="cart">Ajouter au panier</button>
+            <button className="cart" onClick={() => addToCart(product)}>Ajouter au panier</button>
             <button className="buy">Acheter maintenant</button>
           </div>
 

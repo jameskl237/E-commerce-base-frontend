@@ -7,10 +7,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+  background: $auth-page-background;
   .auth-card {
     width: 420px;
-    background: $white;
+    background: $light-color;
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 6px 24px rgba(11, 78, 215, 0.08);
@@ -18,7 +18,7 @@
       font-size: 1.8rem;
       text-align: center;
       margin-bottom: 1.5rem;
-      background: linear-gradient(90deg, #007bff, #ff00ff); // bleu → rose fluo
+      background: $gradient-main; // bleu → rose fluo
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -29,13 +29,13 @@
       align-items: flex-start;
       font-size: 0.95rem;
       font-weight: 500;
-      color: #444;
+      color: $dark-color;
       margin: 0.8rem 0 0.4rem;
 
       input {
         width: 100%;
         padding: 0.7rem 1rem;
-        border: 1px solid #e6eefc;
+        border: 1px solid $input-border-color;
         border-radius: 8px;
         font-size: 0.95rem;
         margin-top: 0.3rem;
@@ -43,7 +43,7 @@
 
         &:focus {
           outline: none;
-          border-color: #007bff; // bleu
+          border-color: $primary-color; // bleu
           box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
         }
       }
@@ -52,12 +52,8 @@
     .btn-primary {
       width: 100%;
       padding: 0.75rem;
-      background: linear-gradient(
-        90deg,
-        #007bff,
-        #ff00ff
-      ); // Dégradé bleu → rose fluo
-      color: $white;
+      background: $gradient-main; // Dégradé bleu → rose fluo
+      color: $light-color;
       font-weight: 600;
       border: none;
       border-radius: 10px;
@@ -77,11 +73,7 @@
       a {
         font-size: 0.9rem;
         font-weight: 500;
-        background: linear-gradient(
-          90deg,
-          #007bff,
-          #ff00ff
-        ); // Dégradé identique
+        background: $gradient-main; // Dégradé identique
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -96,8 +88,8 @@
     }
 
     .alert {
-      background: #ffeef6;
-      color: color.adjust($pink, $lightness: -20%);
+      background: $alert-background-color;
+      color: color.adjust($accent-color, $lightness: -20%);
       padding: 0.6rem;
       border-radius: 8px;
       margin-bottom: 0.6rem;
@@ -109,8 +101,8 @@
   margin-top: 1rem;
   width: 100%;
   padding: 0.75rem;
-  background: #ffffff;
-  border: 1px solid #e6eefc;
+  background: $light-color;
+  border: 1px solid $input-border-color;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 500;
@@ -126,7 +118,7 @@
   }
 
   &:hover {
-    background: #f8f9fa;
+    background: $google-btn-hover-background;
     transform: translateY(-2px);
   }
 }
