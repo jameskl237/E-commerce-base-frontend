@@ -1,7 +1,8 @@
 // src/api/api.js
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_BASE = `${API_ROOT}/api`;
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -24,18 +25,28 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Optionnel : interceptor response pour gérer 401 / refresh token
+// Interceptor response pour gérer 401 / expiration de token
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // ici on peut centraliser la gestion d'expiration de token
+    // Si erreur 401 (non autorisé), le token est invalide ou expiré
+    if (err.response?.status === 401) {
+      // Nettoyer le token invalide
+      localStorage.removeItem("access_token");
+      
+      // Éviter les boucles infinies si on est déjà sur /login
+      if (window.location.pathname !== "/login") {
+        // Déclencher un événement pour notifier AuthProvider
+        window.dispatchEvent(new CustomEvent("auth:logout"));
+      }
+    }
     return Promise.reject(err);
   }
 );
 
 // Récupérer le cookie CSRF
 export async function getCsrfCookie() {
-  return await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+  return await axios.get(`${API_ROOT}/sanctum/csrf-cookie`, {
     withCredentials: true,
   });
 }

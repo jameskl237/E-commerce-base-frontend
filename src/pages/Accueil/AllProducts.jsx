@@ -23,9 +23,9 @@ const AllProducts = () => {
   const ITEMS_PER_PAGE = 12;
 
   const menuLinks = [
-    { label: "Catégories", href: "#" },
+    // { label: "Catégories", href: "#" },
     { label: "Boutiques", href: "/shops" },
-    { label: "Centre d’acheteurs", href: "#" },
+    // { label: "Centre d’acheteurs", href: "#" },
     { label: "Assistance", href: "#" },
   ];
 

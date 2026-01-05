@@ -24,11 +24,15 @@ export default function ShopsDashboard() {
 
   const fetchShops = async () => {
     try {
-      const res = await api.get("auth/user"); 
-      setShops(res.data.data.shops);
+      const res = await api.get("/auth/user"); 
+      // Gérer différentes structures de réponse possibles
+      const userData = res.data?.data || res.data?.user || res.data;
+      const shopsData = userData?.shops || userData?.shop || [];
+      setShops(Array.isArray(shopsData) ? shopsData : []);
     } catch (err) {
       console.error("Erreur récupération boutiques", err);
       toast.error("Erreur lors du chargement des boutiques.");
+      setShops([]);
     }
   };
 

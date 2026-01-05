@@ -5,6 +5,7 @@ import Shop from "./pages/Shop/Shop";
 import AllProducts from "./pages/Accueil/AllProducts";
 import Login from "./pages/management/Login";
 import SupplierDashboard from "./pages/management/supplier/SupplierManagement";
+import UserManagement from "./pages/management/admin/UserManagement";
 import ShopsDashboard from "./pages/management/supplier/ShopsDashboard";
 import ProductEditPage from "./pages/management/supplier/product-edit/ProductEditPage"; // Import de la nouvelle page
 import AdminDashboard from "./pages/management/admin/AdminDashboard";
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/products" element={<AllProducts />} />
               <Route path="/product/:productId" element={<ProductShowPage />} /> {/* New route for product show page */}
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/admin/userManagement" element={<UserManagement />} />
               <Route path="/test-api" element={<ApiTest />} />
               <Route path="/supplier/dashboard/:shopId" element={
                 <PrivateRoute>

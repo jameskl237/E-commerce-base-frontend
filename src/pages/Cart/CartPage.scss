@@ -189,4 +189,24 @@
       }
     }
   }
+
+  .btn-black {
+    background: $gradient-main;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 31, 63, 0.12);
+    transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-black:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+    box-shadow: 0 14px 32px rgba(0, 31, 63, 0.14);
+  }
 }

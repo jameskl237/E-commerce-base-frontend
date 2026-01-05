@@ -69,9 +69,9 @@ function Navbar() {
           {isCartVisible && <CartDropdown />}
         </li>
 
-        <li onClick={() => setIsMenuOpen(false)}>
+        {/* <li onClick={() => setIsMenuOpen(false)}>
           <Link to="/login">Connexion</Link>
-        </li>
+        </li> */}
       </ul>
 
       <div className="menu-icon" onClick={(e) => handleMenuClick(e)}>

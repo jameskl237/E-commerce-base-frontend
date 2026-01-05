@@ -1,29 +1,16 @@
 // src/pages/management/admin/AdminDashboard.jsx
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { FiUsers, FiShoppingBag, FiPackage, FiGrid, FiDollarSign, FiBarChart2 } from "react-icons/fi";
-import AdminLayout from "../../../components/management/AdminLayout";
+import AdminPageLayout from "../../../components/management/AdminPageLayout";
 
 const AdminDashboard = () => {
-  useEffect(() => {
-    console.log('AdminDashboard component mounted');
-    // masquer la sidebar globalement lors de la visite du tableau admin
-    document.body.classList.add('hide-sidebar');
-    return () => {
-      console.log('AdminDashboard component unmounted');
-      document.body.classList.remove('hide-sidebar');
-    };
-  }, []);
-
-  // Debug logging
-  console.log('AdminDashboard rendering');
-
   const managementCards = [
     {
       title: "Gestion des Utilisateurs",
       description: "Gérer les comptes utilisateurs, droits et permissions",
       icon: <FiUsers className="card-icon" />,
-      path: "/admin/users",
+      path: "/admin/userManagement",
       color: "#4F46E5"
     },
     {
@@ -71,30 +58,27 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <AdminLayout>
-      <div className="admin-dashboard">
-        <div className="dashboard-header">
-          <h1>Tableau de Bord Administrateur</h1>
-          <p>Bienvenue dans votre espace d'administration</p>
-        </div>
-
-        <div className="dashboard-grid">
-          {managementCards.map((card, index) => (
-            <Link key={index} to={card.path} className="management-card">
-              <div className="card-content">
-                <div className="card-icon-container" style={{ backgroundColor: `${card.color}20` }}>
-                  {card.icon}
-                </div>
-                <div className="card-text">
-                  <h3>{card.title}</h3>
-                  <p>{card.description}</p>
-                </div>
+    <AdminPageLayout
+      title="Tableau de Bord Administrateur"
+      subtitle="Bienvenue dans votre espace d'administration"
+      showBackButton={false}
+    >
+      <div className="dashboard-grid">
+        {managementCards.map((card, index) => (
+          <Link key={index} to={card.path} className="management-card">
+            <div className="card-content">
+              <div className="card-icon-container" style={{ backgroundColor: `${card.color}20` }}>
+                {card.icon}
               </div>
-            </Link>
-          ))}
-        </div>
+              <div className="card-text">
+                <h3>{card.title}</h3>
+                <p>{card.description}</p>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
-    </AdminLayout>
+    </AdminPageLayout>
   );
 };
 
