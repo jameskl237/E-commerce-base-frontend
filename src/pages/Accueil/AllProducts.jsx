@@ -48,7 +48,12 @@ const AllProducts = () => {
   useEffect(() => {
     api.get("/categories")
       .then(res => {
-        setCategories(res.data.data || res.data);
+        const cats = res.data.data || res.data;
+        if (Array.isArray(cats)) {
+          setCategories(cats);
+        } else {
+          console.error("La réponse de l'API /categories n'est pas un tableau:", cats);
+        }
       })
       .catch(err => {
         console.error("Erreur lors du chargement des catégories :", err);
@@ -57,7 +62,8 @@ const AllProducts = () => {
 
   // Handle filtering and pagination on the client side
   useEffect(() => {
-    let filteredData = allProducts;
+    // Ensure allProducts is an array before filtering
+    let filteredData = Array.isArray(allProducts) ? [...allProducts] : [];
 
     // Apply category filter
     if (selectedCategory) {
