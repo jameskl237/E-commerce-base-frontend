@@ -48,6 +48,9 @@ export default function Login() {
 
   return (
     <div className="auth-page">
+      <button type="button" onClick={() => navigate(-1)} className="back-button">
+        &larr; Retour
+      </button>
       <form className="auth-card" onSubmit={handleSubmit}>
         <h2>Connexion</h2>
 

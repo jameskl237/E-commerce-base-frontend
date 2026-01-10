@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api, { getCsrfCookie } from '../../api/api';
 import './SupplierRegistrationForm.scss';
 
 // A small list of country codes for the phone number input
@@ -11,7 +14,30 @@ const countryCodes = [
     { code: '221', name: 'Sénégal (+221)' },
 ];
 
+// Moved PhoneInput component outside to prevent re-definition on every render
+const PhoneInput = memo(({ section, id, value, onChange, phoneCodeValue, onPhoneCodeChange }) => (
+    <div className="phone-input-group">
+        <select
+            id={`${id}-code`}
+            value={phoneCodeValue}
+            onChange={onPhoneCodeChange}
+        >
+            {countryCodes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
+        </select>
+        <input
+            type="tel"
+            id={id}
+            name={id}
+            value={value}
+            onChange={onChange}
+            placeholder="Numéro de téléphone"
+            required
+        />
+    </div>
+));
+
 const SupplierRegistrationForm = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         user: {
             name: '',
@@ -33,10 +59,8 @@ const SupplierRegistrationForm = () => {
         }
     });
 
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-
-    const handleChange = (section, field) => (e) => {
+    // Memoize handleChange to ensure its reference is stable
+    const handleChange = useCallback((section, field) => (e) => {
         const { value } = e.target;
         setFormData(prevState => ({
             ...prevState,
@@ -45,15 +69,13 @@ const SupplierRegistrationForm = () => {
                 [field]: value
             }
         }));
-    };
+    }, []); // No dependencies, as setFormData is stable
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-        setSuccess('');
 
         if (formData.user.password !== formData.user.confirmPassword) {
-            setError('Les mots de passe ne correspondent pas.');
+            toast.error('Les mots de passe ne correspondent pas.');
             return;
         }
 
@@ -64,6 +86,7 @@ const SupplierRegistrationForm = () => {
             phone: `${formData.user.phoneCode}${formData.user.phone}`,
             address: formData.user.address,
             password: formData.user.password,
+            password_confirmation: formData.user.confirmPassword,
             shop_name: formData.shop.name,
             shop_description: formData.shop.description,
             shop_city: formData.shop.city,
@@ -71,44 +94,40 @@ const SupplierRegistrationForm = () => {
             shop_phone: `${formData.shop.phoneCode}${formData.shop.phone}`,
         };
 
-        console.log('Submitting data to API:', apiPayload);
-
         try {
-            // Replace with your actual API call
-            // const response = await api.post('/register-supplier', apiPayload);
-            setSuccess('Siimulation d\'inscription réussie !');
+            await getCsrfCookie();
+            await api.post('/register-supplier', apiPayload);
+
+            toast.success('Inscription réussie ! Vous allez être redirigé.');
+            
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000); // 3-second delay to allow the user to read the message
+
         } catch (apiError) {
-            setError(apiError.message || 'Une erreur est survenue lors de l\'inscription.');
+            console.error('Registration failed:', apiError);
+            let errorMessage = 'Une erreur est survenue lors de l\'inscription.';
+
+            if (apiError.response?.status === 422 && apiError.response?.data?.errors) {
+                // Laravel validation errors
+                const errors = apiError.response.data.errors;
+                const messages = Object.values(errors).flat();
+                errorMessage = messages.join('\n');
+            } else if (apiError.response?.data?.message) {
+                // Other errors with a 'message' field
+                errorMessage = apiError.response.data.message;
+            }
+
+            toast.error(errorMessage, {
+                autoClose: 5000, // Give more time to read multiple errors
+                style: { whiteSpace: 'pre-line' } // Ensure newlines are rendered
+            });
         }
     };
-
-    const PhoneInput = ({ section, id }) => (
-        <div className="phone-input-group">
-            <select
-                id={`${id}-code`}
-                value={formData[section].phoneCode}
-                onChange={handleChange(section, 'phoneCode')}
-            >
-                {countryCodes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
-            </select>
-            <input
-                type="tel"
-                id={id}
-                name={id}
-                value={formData[section].phone}
-                onChange={handleChange(section, 'phone')}
-                placeholder="Numéro de téléphone"
-                required
-            />
-        </div>
-    );
 
     return (
         <div className="supplier-registration-form">
             <form onSubmit={handleSubmit}>
-                {error && <p className="error-message">{error}</p>}
-                {success && <p className="success-message">{success}</p>}
-
                 <fieldset>
                     <legend>Informations sur le Vendeur</legend>
                     <div className="form-group">
@@ -125,7 +144,14 @@ const SupplierRegistrationForm = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="user-phone">Téléphone du vendeur</label>
-                        <PhoneInput section="user" id="user-phone" />
+                        <PhoneInput 
+                            section="user" 
+                            id="user-phone" 
+                            value={formData.user.phone}
+                            onChange={handleChange('user', 'phone')}
+                            phoneCodeValue={formData.user.phoneCode}
+                            onPhoneCodeChange={handleChange('user', 'phoneCode')}
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="user-address">Adresse</label>
@@ -161,7 +187,14 @@ const SupplierRegistrationForm = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="shop-phone">Téléphone de la boutique</label>
-                        <PhoneInput section="shop" id="shop-phone" />
+                        <PhoneInput 
+                            section="shop" 
+                            id="shop-phone" 
+                            value={formData.shop.phone}
+                            onChange={handleChange('shop', 'phone')}
+                            phoneCodeValue={formData.shop.phoneCode}
+                            onPhoneCodeChange={handleChange('shop', 'phoneCode')}
+                        />
                     </div>
                 </fieldset>
 

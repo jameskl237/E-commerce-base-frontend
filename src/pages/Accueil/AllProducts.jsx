@@ -27,7 +27,7 @@ const AllProducts = () => {
     // { label: "Catégories", href: "#" },
     { label: "Boutiques", href: "/shops" },
     // { label: "Centre d’acheteurs", href: "#" },
-    { label: "Assistance", href: "#" },
+    // { label: "Assistance", href: "#" },
   ];
 
   // Fetch all products once on component mount
