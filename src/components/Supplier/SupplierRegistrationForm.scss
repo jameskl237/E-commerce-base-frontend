@@ -1,0 +1,119 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.supplier-registration-form {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: $light-color;
+  border-radius: 8px;
+  box-shadow: $shadow;
+  border: 1px solid $input-border-color;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  fieldset {
+    border: 1px solid $input-border-color;
+    padding: 2rem;
+    border-radius: 8px;
+    
+    legend {
+      padding: 0 1rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary-color;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: $dark-color;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid $input-border-color;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      font-family: $font-main;
+
+      &:focus {
+        outline: none;
+        border-color: $secondary-color;
+      }
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+  }
+
+  .phone-input-group {
+    display: flex;
+    gap: 0.5rem;
+
+    select {
+      flex: 0 1 40%;
+      padding: 0.75rem;
+      border: 1px solid $input-border-color;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+    }
+
+    input {
+      flex: 1 1 60%;
+    }
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: $accent-color;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  .error-message {
+    color: $danger-color;
+    background-color: lighten($danger-color, 35%);
+    border: 1px solid $danger-color;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .success-message {
+    color: $success-color;
+    background-color: lighten($success-color, 45%);
+    border: 1px solid $success-color;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+}

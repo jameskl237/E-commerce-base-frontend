@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaSearch, FaShoppingCart, FaUser, FaBars } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import MaketuLogo from '/src/assets/Maketu1.jpeg';
 import './NavbarShop.scss'; // Import its own styles
 import { useCart } from '../../context/CartContext';
@@ -12,6 +12,14 @@ const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const [isCartVisible, setIsCartVisible] = useState(false);
   const cartRef = useRef(null);
+
+  // Get the current location
+  const location = useLocation();
+
+  // Determine the correct link for the user icon
+  const userIconLink = location.pathname.startsWith('/shop/')
+    ? '/login'
+    : '/supplier/register';
 
   const handleCartClick = (e) => {
     e.preventDefault();
@@ -70,9 +78,9 @@ const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
           </a>
           {isCartVisible && <CartDropdown />}
         </li>
-        <button>
+        <Link to={userIconLink} className="nav-icon-link">
           <FaUser />
-        </button>
+        </Link>
         <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>
           <FaBars />
         </button>

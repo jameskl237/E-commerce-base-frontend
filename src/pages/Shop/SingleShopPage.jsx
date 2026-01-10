@@ -8,6 +8,7 @@ import { API_BASE_URL } from '../../config/constants';
 import Pagination from '../../components/Pagination';
 import { useCart } from '../../context/CartContext';
 import './SingleShopPage.scss';
+import defaultImg from '../../assets/Maketu1.jpeg'; // fallback image import
 
 const SingleShopPage = () => {
   const { addToCart } = useCart();
@@ -35,6 +36,7 @@ const SingleShopPage = () => {
         const shopData = res.data.data || res.data;
         setShop(shopData);
         setAllProducts(shopData.products || []);
+        console.log("Données de la boutique chargées :", shopData);
         setLoading(false);
       })
       .catch(err => {
@@ -65,6 +67,59 @@ const SingleShopPage = () => {
     setCurrentPage(page);
   };
 
+  // Fonction pour trouver l'URL de l'image principale.
+  const getPrincipalImageUrl = (product) => {
+    if (product) {
+      // 0. fallback s'il existe un champ direct (thumbnail, image, picture, etc.)
+      const direct =
+        product.thumbnail ||
+        product.image ||
+        product.picture ||
+        product.img ||
+        product.photo;
+      if (direct) {
+        const url = String(direct);
+        if (url.startsWith("http") || url.startsWith("//")) return url;
+        return `${API_BASE_URL}/storage/${url.replace(/^\/+/, "")}`;
+      }
+
+      // 1. Si medias est un tableau, chercher media principal avec plusieurs variantes de clé
+      if (Array.isArray(product.medias) && product.medias.length > 0) {
+        const candidates = product.medias;
+
+        // chercher propriétés qui peuvent indiquer le principal
+        const principal =
+          candidates.find(m => m.is_principal) ||
+          candidates.find(m => m.isPrincipal) ||
+          candidates.find(m => m.isMain) ||
+          candidates.find(m => m.is_main) ||
+          candidates.find(m => m.type === "primary") ||
+          candidates.find(m => m.role === "primary");
+
+        if (principal && (principal.url || principal.path || principal.full_url)) {
+          const raw = principal.url || principal.full_url || principal.path || "";
+          const url = String(raw);
+          if (!url) return defaultImg;
+          if (url.startsWith("http") || url.startsWith("//")) return url;
+          return `${API_BASE_URL}/storage/${url.replace(/^\/+/, "")}`;
+        }
+
+        // 2. fallback: premier média ayant une URL
+        const firstWithUrl = candidates.find(m => m.url || m.path || m.full_url);
+        if (firstWithUrl) {
+          const raw = firstWithUrl.url || firstWithUrl.full_url || firstWithUrl.path || "";
+          const url = String(raw);
+          if (!url) return defaultImg;
+          if (url.startsWith("http") || url.startsWith("//")) return url;
+          return `${API_BASE_URL}/storage/${url.replace(/^\/+/, "")}`;
+        }
+      }
+    }
+
+    // 3. Si aucune image trouvée, retourner l'image par défaut.
+    return defaultImg;
+  };
+
   if (loading) return <p>Chargement...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
@@ -91,16 +146,14 @@ const SingleShopPage = () => {
         <div className="product-grid">
           {products.length > 0 ? (
             products.map(p => {
+              const imageUrl = getPrincipalImageUrl(p);
               return (
                 <Link to={`/product/${p.id}`} key={p.id} className="product-card-link">
                 <div className="product-card">
                   <img
-                    src={
-                      p.medias?.length > 0
-                        ? `${API_BASE_URL}/storage/${p.medias[0].url.replace(/^\//, '')}`
-                        : "/src/assets/default.jpg"
-                    }
+                    src={imageUrl}
                     alt={p.name}
+                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = defaultImg; }}
                   />
                   <h3>{p.name}</h3>
                   <p className="price">{p.price} FCFA</p>

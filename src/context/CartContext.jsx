@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, useEffect } from 'react';
 
 const CartContext = createContext();
 
@@ -13,7 +13,7 @@ const cartReducer = (state, action) => {
       if (existingProductIndex !== -1) {
         // If it exists, update the quantity
         const updatedCart = [...state];
-        updatedCart[existingProductIndex].quantity += 1;
+        updatedCart[existingProduct-+-index].quantity += 1;
         return updatedCart;
       } else {
         // If it's a new product, add it to the cart
@@ -29,7 +29,14 @@ const cartReducer = (state, action) => {
 };
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, dispatch] = useReducer(cartReducer, []);
+  // Initialize state from localStorage
+  const initialState = JSON.parse(localStorage.getItem('cart')) || [];
+  const [cartItems, dispatch] = useReducer(cartReducer, initialState);
+
+  // Persist state to localStorage on change
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (product) => {
     dispatch({ type: 'ADD_TO_CART', payload: product });

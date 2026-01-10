@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from "../api/api";
+import api, { getCsrfCookie } from "../api/api";
 import { AuthContext } from "../context/AuthContext"; // Chemin corrigé
 
 export const AuthProvider = ({ children }) => {
@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      await getCsrfCookie();
       const res = await api.post("/login", { email, password });
       // Gérer différentes structures de réponse possibles
       const token = 
@@ -76,6 +77,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (payload) => {
     try {
+      await getCsrfCookie();
       const res = await api.post("/auth/register", payload);
       // Gérer différentes structures de réponse possibles
       const token = 
@@ -109,6 +111,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      await getCsrfCookie();
       await api.post("/logout"); // si ton API fournit la route
     } catch {
       // ignore

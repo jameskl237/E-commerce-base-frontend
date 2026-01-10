@@ -114,23 +114,7 @@
     display: flex;
     align-items: center;
 
-    .burger {
-      display: none; // Hidden by default on larger screens
-      font-size: 1.6rem;
-      margin-left: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-
-      @include responsive(lg) {
-        display: block; // Visible on medium and smaller screens
-      }
-
-      &:hover {
-        color: $accent-color;
-      }
-    }
-
-    button {
+    .nav-icon-link, .cart-link, .burger, button {
       background: transparent;
       border: none;
       color: $light-color;
@@ -138,9 +122,19 @@
       margin-left: 1rem;
       cursor: pointer;
       transition: 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
 
       &:hover {
         color: $accent-color;
+      }
+    }
+
+    .burger {
+      display: none; // Hidden by default on larger screens
+      @include responsive(lg) {
+        display: block; // Visible on medium and smaller screens
       }
     }
   }
