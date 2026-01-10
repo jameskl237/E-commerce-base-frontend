@@ -48,6 +48,14 @@ const ProductShowPage = () => {
     window.open(waUrl, '_blank');
   };
 
+  const handleViewShop = () => {
+    if (product.shop?.id && product.shop?.name) {
+      navigate(`/shop/${product.shop.id}/${product.shop.name}`);
+    } else {
+      toast.error("Information sur la boutique non disponible.");
+    }
+  };
+
   if (loading) return <p>Chargement...</p>;
   if (!product) return <p>Produit introuvable</p>;
 
@@ -115,6 +123,11 @@ const ProductShowPage = () => {
           <div className="actions">
             <button className="cart" onClick={() => addToCart(product)}>Ajouter au panier</button>
             <button className="buy" onClick={handleBuyNow}>Acheter maintenant</button>
+            {product.shop && (
+              <button className="view-shop" onClick={handleViewShop}>
+                Voir boutique
+              </button>
+            )}
           </div>
 
           <div className="details">
