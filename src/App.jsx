@@ -9,6 +9,7 @@ import UserManagement from "./pages/management/admin/UserManagement";
 import ShopsDashboard from "./pages/management/supplier/ShopsDashboard";
 import ProductEditPage from "./pages/management/supplier/product-edit/ProductEditPage"; // Import de la nouvelle page
 import AdminDashboard from "./pages/management/admin/AdminDashboard";
+import SupplierRegistrationPage from "./pages/management/supplier/SupplierRegistrationPage";
 import { AuthProvider } from "./auth/AuthProvider";
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -61,6 +62,8 @@ export default function App() {
                   <AdminDashboard />
                 </PrivateRoute>
               } />
+
+              <Route path="/supplier/register" element={<SupplierRegistrationPage />} />
 
               {/* Add more routes as needed */}
             </Routes>

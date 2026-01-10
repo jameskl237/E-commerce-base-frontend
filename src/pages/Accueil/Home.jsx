@@ -1,7 +1,8 @@
 import React from "react";
 import "./Home.scss";
 import { Link } from "react-router-dom";
-import Footer from "../../components/Accueil/Footer"; // Assure-toi que ton Footer est dans src/components/Footer.jsx
+import Footer from "../../components/Accueil/Footer";
+import mascot from "../../assets/Maketa.png";
 
 const Home = () => {
   return (
@@ -13,8 +14,8 @@ const Home = () => {
             Bienvenue chez <span>Makétu</span>
           </h1>
           <p>
-            La plateforme de commerce en ligne  moderne qui connecte les vendeurs et les
-            clients facilement et rapidement.
+            La plateforme de commerce en ligne moderne qui connecte les vendeurs
+            et les clients facilement et rapidement.
           </p>
           <Link to="/products" className="cta-btn">
             Découvrir
@@ -27,32 +28,37 @@ const Home = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="about">
-        <h2>Pourquoi choisir Makétu ?</h2>
-        <p>
-          Makétu révolutionne le commerceen ligne en offrant une plateforme simple,
-          moderne et sécurisée. Que vous soyez vendeur ou acheteur, notre
-          objectif est de rendre vos transactions fluides et agréables.
-        </p>
+      {/* Shops Section */}
+      <section className="home-section shops-section">
+        <div className="home-section-content">
+          <h2>Explorez nos boutiques</h2>
+          <p>
+            Découvrez une variété de boutiques uniques proposant des produits exceptionnels.
+            Trouvez vos marques préférées et soutenez les vendeurs locaux.
+          </p>
+          <Link to="/shops" className="cta-btn">
+            Voir les boutiques
+          </Link>
+        </div>
+        <div className="home-section-image">
+          <img src={mascot} alt="Mascotte Makétu" />
+        </div>
       </section>
 
-      {/* Features Section */}
-      <section className="features">
-        <h2>Nos Atouts</h2>
-        <div className="features-grid">
-          <div className="feature-card">
-            <h3>⚡ Rapidité</h3>
-            <p>Une navigation fluide et des paiements sécurisés en un clic.</p>
-          </div>
-          <div className="feature-card">
-            <h3>📦 Variété</h3>
-            <p>Un large choix de produits pour tous les besoins.</p>
-          </div>
-          <div className="feature-card">
-            <h3>🤝 Confiance</h3>
-            <p>Des vendeurs certifiés et un service client à votre écoute.</p>
-          </div>
+      {/* Products Section */}
+      <section className="home-section products-section">
+        <div className="home-section-image">
+          <img src={mascot} alt="Mascotte Makétu" />
+        </div>
+        <div className="home-section-content">
+          <h2>Parcourez nos produits</h2>
+          <p>
+            Des milliers d'articles vous attendent. Que vous cherchiez quelque chose de
+            spécifique ou que vous soyez juste curieux, vous trouverez votre bonheur.
+          </p>
+          <Link to="/products" className="cta-btn">
+            Voir les produits
+          </Link>
         </div>
       </section>
 

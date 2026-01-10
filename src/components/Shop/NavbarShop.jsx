@@ -70,9 +70,9 @@ const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
           </a>
           {isCartVisible && <CartDropdown />}
         </li>
-        <button>
+        <Link to="/supplier/register" className="nav-icon-link">
           <FaUser />
-        </button>
+        </Link>
         <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>
           <FaBars />
         </button>
