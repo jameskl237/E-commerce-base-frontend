@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../../config/constants';
 import './ProductShowPage.scss';
 import { useCart } from '../../context/CartContext';
 import { FiArrowLeft, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 const ProductShowPage = () => {
   const { addToCart } = useCart();
@@ -23,6 +24,29 @@ const ProductShowPage = () => {
     };
     fetchProduct();
   }, [productId]);
+
+  // Helper function to normalize phone number
+  const normalizePhone = (raw) => {
+    if (!raw) return null;
+    const digits = String(raw).replace(/\D+/g, '');
+    if (!digits) return null;
+    const cleaned = digits.replace(/^0+/, '');
+    return cleaned.length < 8 ? null : cleaned;
+  };
+
+  const handleBuyNow = () => {
+    const phone = normalizePhone(product.shop?.phone);
+
+    if (!phone) {
+      toast.error("Le numéro de téléphone de la boutique n'est pas disponible.");
+      return;
+    }
+
+    const message = `Bonjour, je suis intéressé par votre produit "${product.name}" au prix de ${product.price} FCFA. Est-il toujours disponible ?`;
+    const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(waUrl, '_blank');
+  };
 
   if (loading) return <p>Chargement...</p>;
   if (!product) return <p>Produit introuvable</p>;
@@ -90,7 +114,7 @@ const ProductShowPage = () => {
 
           <div className="actions">
             <button className="cart" onClick={() => addToCart(product)}>Ajouter au panier</button>
-            <button className="buy">Acheter maintenant</button>
+            <button className="buy" onClick={handleBuyNow}>Acheter maintenant</button>
           </div>
 
           <div className="details">
