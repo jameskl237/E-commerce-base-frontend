@@ -211,7 +211,7 @@ const CartPage = () => {
               {cartItems.map((item) => (
                 <div className="cart-item" key={item.id}>
                   <div className="item-info">
-                    <img src={item.medias && item.medias.length > 0 ? `http://localhost:8000/storage/${item.medias[0].url}`: "/src/assets/Maketu1.jpeg"} alt={item.name} />
+                    <img src={item.medias && item.medias.length > 0 ? `https://maketubackend.srv696182.hstgr.cloud//storage/${item.medias[0].url}`: "/src/assets/Maketu1.jpeg"} alt={item.name} />
                     <div>
                       <h3>{item.name}</h3>
                       <p>{item.price} FCFA</p>

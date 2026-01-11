@@ -1,7 +1,7 @@
 // src/api/api.js
 import axios from "axios";
 
-const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_ROOT = "https://maketubackend.srv696182.hstgr.cloud";
 const API_BASE = `${API_ROOT}/api`;
 
 const api = axios.create({
@@ -46,7 +46,7 @@ api.interceptors.response.use(
 
 // Récupérer le cookie CSRF
 export async function getCsrfCookie() {
-  return await axios.get(`${API_ROOT}/sanctum/csrf-cookie`, {
+  return await axios.get(`${API_ROOT}/backend/sanctum/csrf-cookie`, {
     withCredentials: true,
   });
 }

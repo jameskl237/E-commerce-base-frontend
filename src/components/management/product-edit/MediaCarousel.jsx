@@ -3,7 +3,7 @@ import { FiChevronLeft, FiChevronRight, FiTrash2 } from 'react-icons/fi';
 import './MediaCarousel.scss';
 
 // L'URL de base de votre backend.
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://maketubackend.srv696182.hstgr.cloud/';
 
 const MediaCarousel = ({ product, onDelete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

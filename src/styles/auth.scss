@@ -43,7 +43,7 @@
           transition: color 0.2s ease;
 
           &:hover {
-            color: darken($primary-color, 15%);
+            color: #062a45; // Darkened primary color
           }
         }
 
@@ -123,7 +123,7 @@
 
       .alert {
         background: $alert-background-color;
-        color: color.adjust($accent-color, $lightness: -20%);
+        color: #d9465c; // Adjusted accent color
         padding: 0.6rem;
         border-radius: 8px;
         margin-bottom: 0.6rem;

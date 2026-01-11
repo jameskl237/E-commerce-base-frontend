@@ -3,7 +3,7 @@ import { useCart } from "../../context/CartContext";
 import defaultImg from "../../assets/Maketu1.jpeg"; // fallback image import
 
 // L'URL de base de votre backend.
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://maketubackend.srv696182.hstgr.cloud/';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
