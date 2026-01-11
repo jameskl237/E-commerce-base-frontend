@@ -1,0 +1,78 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.supplier-registration-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  padding: 2rem;
+
+  .page-header {
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    position: relative;         // pour que le back-button puisse être positionné absolu
+    justify-content: center;    // centre le contenu (titre) horizontalement
+    padding-left: 56px;         // espace pour le bouton placé à gauche sans décaler le titre
+    
+    h1 {
+      font-size: 2rem;
+      color: $primary-color;
+      margin: 0;
+    }
+  }
+}
+
+// Basic styles for the back button if they are not global
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  background-color: $light-color;
+  color: $dark-color;
+  border: 1px solid $input-border-color;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  /* positionnement absolu : n'affecte plus le flow du header */
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &:hover {
+    background-color: darken($light-color, 5%);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-50%) translateY(-2px);
+  }
+
+  .back-icon {
+    font-size: 1.1rem;
+  }
+}
+
+/* Responsive adjustments */
+@include responsive(sm) {
+  .supplier-registration-page {
+    .page-header {
+      padding-left: 44px; /* moins d'espace sur petit écran */
+    }
+
+    .back-button {
+      padding: 0.35rem;
+      left: 8px;
+      height: 36px;
+      width: 36px;
+      border-radius: 8px;
+
+      span { display: none; } /* n'afficher que l'icône si présent */
+    }
+  }
+}

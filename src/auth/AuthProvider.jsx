@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from "../api/api";
+import api, { getCsrfCookie } from "../api/api";
 import { AuthContext } from "../context/AuthContext"; // Chemin corrigé
 
 export const AuthProvider = ({ children }) => {
@@ -15,7 +15,9 @@ export const AuthProvider = ({ children }) => {
     }
     api.get("/auth/user")
       .then(res => {
-        setUser(res.data.data); // adapter selon ta réponse API
+        // Gérer différentes structures de réponse
+        const user = res.data?.data || res.data?.user || res.data;
+        setUser(user);
       })
       .catch(() => {
         localStorage.removeItem("access_token");
@@ -24,28 +26,92 @@ export const AuthProvider = ({ children }) => {
       .finally(() => setLoading(false));
   }, []);
 
+  // Écouter les événements de déconnexion (401 depuis l'interceptor)
+  useEffect(() => {
+    const handleLogout = () => {
+      setUser(null);
+    };
+    
+    window.addEventListener("auth:logout", handleLogout);
+    return () => {
+      window.removeEventListener("auth:logout", handleLogout);
+    };
+  }, []);
+
   const login = async (email, password) => {
-    const res = await api.post("/login", { email, password });
-    // adapter selon la réponse de ton backend (ex : res.data.access_token)
-    const token = res.data.data.access_token || res.data.data.token;
-    localStorage.setItem("access_token", token);
-    // récupérer l'utilisateur
-    const userRes = await api.get("/auth/user");
-    setUser(userRes.data.data);
-    return userRes.data.data;
+    try {
+      await getCsrfCookie();
+      const res = await api.post("/login", { email, password });
+      // Gérer différentes structures de réponse possibles
+      const token = 
+        res.data?.data?.access_token || 
+        res.data?.data?.token ||
+        res.data?.access_token || 
+        res.data?.token ||
+        res.access_token ||
+        res.token;
+      
+      if (!token) {
+        throw new Error("Token non reçu du serveur");
+      }
+      
+      localStorage.setItem("access_token", token);
+      
+      // récupérer l'utilisateur
+      try {
+        const userRes = await api.get("/auth/user");
+        const user = userRes.data?.data || userRes.data?.user || userRes.data;
+        setUser(user);
+        return user;
+      } catch (userError) {
+        // Si la récupération de l'utilisateur échoue, nettoyer le token
+        localStorage.removeItem("access_token");
+        throw new Error("Impossible de récupérer les informations utilisateur");
+      }
+    } catch (error) {
+      // Nettoyer le token en cas d'erreur
+      localStorage.removeItem("access_token");
+      throw error;
+    }
   };
 
   const register = async (payload) => {
-    const res = await api.post("/auth/register", payload);
-    const token = res.data.data.access_token || res.data.data.token;
-    if (token) localStorage.setItem("access_token", token);
-    const userRes = await api.get("/auth/user");
-    setUser(userRes.data.data);
-    return userRes.data.data;
+    try {
+      await getCsrfCookie();
+      const res = await api.post("/auth/register", payload);
+      // Gérer différentes structures de réponse possibles
+      const token = 
+        res.data?.data?.access_token || 
+        res.data?.data?.token ||
+        res.data?.access_token || 
+        res.data?.token ||
+        res.access_token ||
+        res.token;
+      
+      if (!token) {
+        throw new Error("Token non reçu du serveur");
+      }
+      
+      localStorage.setItem("access_token", token);
+      
+      try {
+        const userRes = await api.get("/auth/user");
+        const user = userRes.data?.data || userRes.data?.user || userRes.data;
+        setUser(user);
+        return user;
+      } catch (userError) {
+        localStorage.removeItem("access_token");
+        throw new Error("Impossible de récupérer les informations utilisateur");
+      }
+    } catch (error) {
+      localStorage.removeItem("access_token");
+      throw error;
+    }
   };
 
   const logout = async () => {
     try {
+      await getCsrfCookie();
       await api.post("/logout"); // si ton API fournit la route
     } catch {
       // ignore

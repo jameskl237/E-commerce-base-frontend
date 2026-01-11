@@ -33,12 +33,12 @@ const ProductMediaCarousel = ({ medias, productName }) => {
       <div className="media-display">
         {currentMedia.url.includes('.mp4') || currentMedia.file_path.includes('.mp4') ||
          currentMedia.url.includes('.webm') || currentMedia.file_path.includes('.webm') ? (
-          <video controls src={currentMedia.url || `http://localhost:8000/storage/${currentMedia.file_path}`}>
+          <video controls src={currentMedia.url || `https://maketubackend.srv696182.hstgr.cloud//storage/${currentMedia.file_path}`}>
             Your browser does not support the video tag.
           </video>
         ) : (
           <img
-            src={currentMedia.url || `http://localhost:8000/storage/${currentMedia.file_path}`}
+            src={currentMedia.url || `https://maketubackend.srv696182.hstgr.cloud//storage/${currentMedia.file_path}`}
             alt={`${productName} - ${currentIndex + 1}`}
           />
         )}
@@ -65,7 +65,7 @@ const ProductMediaCarousel = ({ medias, productName }) => {
               <FiPlayCircle className="video-thumbnail-icon" />
             ) : (
               <img
-                src={media.url || `http://localhost:8000/storage/${media.file_path}`}
+                src={media.url || `https://maketubackend.srv696182.hstgr.cloud//storage/${media.file_path}`}
                 alt={`Thumbnail ${index + 1}`}
               />
             )}

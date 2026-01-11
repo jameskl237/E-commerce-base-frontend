@@ -20,9 +20,23 @@ export default function Login() {
     setSubmitting(true);
     try {
       const user = await login(email, password);
+      console.log('Login successful, user role:', user.role);
       toast.success("Connexion réussie !");
-      if (user.role === "administrator") navigate("/admin/dashboard");
-      else navigate("/supplier/shops/dashboard");
+      
+      // Normaliser le rôle pour être insensible à la casse
+      const userRole = user.role?.toLowerCase();
+      
+      if (userRole === "admin" || userRole === "administrator") {
+        console.log('Navigating to admin dashboard, user role:', user.role);
+        navigate("/admin/dashboard");
+      } else if (userRole === "supplier") {
+        console.log('Navigating to supplier dashboard, user role:', user.role);
+        navigate("/supplier/shops/dashboard");
+      } else {
+        // Fallback pour les autres rôles ou rôle non défini
+        console.log('Unknown role, defaulting to supplier dashboard, user role:', user.role);
+        navigate("/supplier/shops/dashboard");
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Échec de l'authentification";
       toast.error(errorMessage);
@@ -34,8 +48,15 @@ export default function Login() {
 
   return (
     <div className="auth-page">
+    <div className="auth-container">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <h2>Connexion</h2>
+        <div className="auth-header">
+          <button type="button" onClick={() => navigate(-1)} className="back-button">
+            &larr;
+          </button>
+          <h2>Connexion</h2>
+        </div>
+
 
         <label>Email
           <input
@@ -75,6 +96,8 @@ export default function Login() {
           Se connecter avec Google
         </button>
       </form>
+    </div>
+
     </div>
   );
 }

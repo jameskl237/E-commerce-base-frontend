@@ -1,0 +1,214 @@
+@use '../../../styles/variables.scss' as *;
+@use '../../../styles/mixins.scss' as *;
+
+.admin-dashboard {
+  .admin-header {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $primary-color;
+      text-decoration: none;
+      flex: 0 0 auto;
+      padding-right: 0.5rem;
+    }
+
+    .header-main {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center; /* centre le titre et les contrôles */
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;   // centre horizontalement les éléments
+      justify-content: center;
+      text-align: center;    // centre le texte à l'intérieur
+
+      h1 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: $primary-color;
+      }
+
+      p {
+        margin: 0;
+        color: #222;
+        font-size: 0.95rem;
+      }
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: center; /* centre la search-box et le btn-add */
+      margin-top: 0.5rem;
+      width: 100%;
+      max-width: 820px; /* limite la ligne pour rester centré visuellement */
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    //   background: $white;
+      border: 1px solid #e6e6e6;
+      padding: 0.35rem 0.6rem;
+      border-radius: 8px;
+      flex: 1 1 360px;      // can shrink on small screens
+      max-width: 560px;
+
+      input {
+        border: none;
+        outline: none;
+        font-size: 0.95rem;
+        flex: 1;
+        min-width: 80px;
+      }
+
+      .clear-search {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #777;
+        padding: 0.15rem;
+      }
+    }
+
+    .btn-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: $gradient-main;
+      color: white;
+      border: none;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+  }
+
+  /* vertical spacing between header area and rest of content */
+  .table-container {
+    margin-top: 1rem;
+  }
+}
+
+/* Responsive: keep search + add inline, but tighten widths */
+@include responsive(sm) {
+  .admin-dashboard {
+    .admin-header {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 0.5rem;
+      margin-bottom: 1rem;
+
+      /* back button stays visually at left (fixed place) */
+      .back-button {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        padding: 6px 8px;
+        z-index: 5;
+
+        /* masquer le texte "Retour" et ne garder que l'icône */
+        > span {
+          display: none;
+        }
+
+        /* ajustements pour que le bouton reste compact et centré sur l'icône */
+        width: auto;
+        min-width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+      }
+
+      .header-main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0 36px; /* leave space for back-button on left */
+      }
+
+      .title-block {
+        h1 { font-size: 1.15rem; }
+        p  { font-size: 0.9rem; color: rgba(34,34,34,0.7); }
+      }
+
+      /* controls row: try inline first, wrap to stacked if needed */
+      .controls-row {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 0.25rem;
+      }
+
+      .search-box {
+        flex: 1 1 220px;
+        max-width: calc(100% - 120px);
+        min-width: 140px;
+        order: 1;
+
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid #e6e6e6;
+        padding: 0.45rem 0.6rem;
+        border-radius: 10px;
+        background: white;
+
+        input {
+          font-size: 0.95rem;
+          padding: 6px 4px;
+        }
+      }
+
+      .btn-add {
+        order: 2;
+        flex: 0 0 auto;
+        padding: 0.55rem 0.9rem;
+        border-radius: 10px;
+        font-size: 0.95rem;
+      }
+    }
+
+    /* espace entre header + contenu */
+    .table-container {
+      margin-top: 1.25rem;
+    }
+  }
+}
+
+/* Ultra small screens fallback */
+@media (max-width: 360px) {
+  .admin-dashboard {
+    .admin-header {
+      .header-main { padding: 0 12px; }
+      .controls-row { gap: 0.4rem; }
+      .search-box { min-width: 120px; flex-basis: 100%; max-width: 100%; }
+      .btn-add { flex-basis: auto; }
+    }
+  }
+}

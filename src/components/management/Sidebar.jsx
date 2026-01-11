@@ -22,8 +22,11 @@ const items = {
 
 export default function Sidebar({ isOpen, closeSidebar, navHeight }) {
   const { user } = useAuth();
-  const role = user?.role || "supplier";
-  const list = items[role] || [];
+  // Normaliser le rôle : mapper "admin" à "administrator" pour correspondre aux clés dans items
+  // Gérer différentes variantes (insensible à la casse)
+  const userRole = user?.role?.toLowerCase() || "supplier";
+  const normalizedRole = userRole === "admin" || userRole === "administrator" ? "administrator" : "supplier";
+  const list = items[normalizedRole] || [];
 
   return (
     <aside

@@ -1,6 +1,20 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
 .product-page {
   font-family: "Poppins", sans-serif;
   color: #333;
+
+  /* prevent accidental overflow from padding/margins */
+  box-sizing: border-box;
+  &,
+  & * {
+    box-sizing: inherit;
+    max-width: 100%;
+  }
+
+  /* safeguard: no horizontal page scroll from this page */
+  overflow-x: hidden;
 
   /* HERO */
   .hero-banner {
@@ -10,7 +24,7 @@
     align-items: center;
     text-align: center;
     padding: 6rem 2rem;
-    background: linear-gradient(135deg, #001f3f, #0074d9);
+    background: $gradient-main;
     color: white;
 
     h1 {
@@ -70,14 +84,16 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 2rem;
+      width: 100%;
+      justify-items: center; /* center cards inside each grid cell */
     }
 
     .product-card-link {
       display: block;
       text-decoration: none;
-      color: inherit; /* Inherit color from parent or define as needed */
-      max-width: 280px; /* Limit the width of a single product card */
-      margin: 0 auto; /* Center the card if it's the only one */
+      color: inherit;
+      width: 100%;         /* fill the grid cell */
+      max-width: 280px;    /* visual limit but won't force overflow */
     }
 
     .product-card {
@@ -95,12 +111,13 @@
       }
 
       img {
+        display: block;
         width: 100%;
         height: 180px;
         object-fit: cover;
         border-radius: 10px;
         margin-bottom: 1rem;
-        flex-shrink: 0; /* Prevent image from shrinking */
+        flex-shrink: 0;
       }
 
       h3 {
@@ -131,7 +148,7 @@
   }
 
   /* RESPONSIVE */
-  @media (max-width: 992px) {
+  @include responsive(lg) {
     .navbar {
       flex-wrap: wrap;
 
@@ -149,7 +166,7 @@
     }
   }
 
-  @media (max-width: 576px) {
+  @include responsive(sm) {
     .hero-banner h1 {
       font-size: 1.8rem;
     }

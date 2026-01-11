@@ -28,4 +28,19 @@
       border-color: #0074d9;
     }
   }
+
+  .ellipsis {
+    padding: 0.5rem 0.25rem;
+    user-select: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    button {
+      padding: 0.4rem 0.6rem; // Réduire le padding pour les petits écrans
+      margin: 0 0.15rem; // Réduire la marge pour les petits écrans
+      font-size: 0.9rem; // Optionnel: réduire la taille de la police
+    }
+  }
 }

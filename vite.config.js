@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'https://maketubackend.srv696182.hstgr.cloud/',
         changeOrigin: true,
         secure: false,
       }

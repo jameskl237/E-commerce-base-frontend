@@ -19,10 +19,10 @@ const Shop = () => {
   const ITEMS_PER_PAGE = 10; // Changed to 10 for consistency with products
 
   const menuLinks = [
-    { label: "Accueil", href: "/products" },
+    { label: "Accueil", href: "/" },
+    { label: "Nos produits", href: "/products" },
     { label: "Boutiques", href: "/shops" },
-    { label: "Centre d’acheteurs", href: "#" },
-    { label: "Assistance", href: "#" },
+    // { label: "Assistance", href: "#" },
   ];
 
   // Fetch all shops once on component mount

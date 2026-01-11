@@ -1,4 +1,5 @@
 @use './variables.scss' as *;
+@use './mixins.scss' as *;
 
 // Import police Google Fonts (Poppins élégante et fine)
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap");
@@ -250,7 +251,7 @@ body {
 }
 
 // 🚀 Responsivité
-@media (max-width: 1024px) {
+@include responsive(lg) {
   .dashboard-header {
     flex-direction: column;
     align-items: center;
@@ -279,7 +280,7 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@include responsive(md) {
 
   body {
     font-size: 14px;
@@ -319,7 +320,7 @@ body {
   }
 }
 
-@media (max-width: 480px) {
+@include responsive(sm) {
   body {
     font-size: 14px;
     overflow-x: hidden;
@@ -371,7 +372,7 @@ body {
   .table-container {
     width: 95%;
     margin: 0 auto;
-    background-color: $white;
+    background-color: $light-color;
     padding: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -473,7 +474,7 @@ body {
 }
 
 // 🚀 Responsive
-@media (max-width: 768px) {
+@include responsive(md) {
   .shops-container {
     grid-template-columns: 1fr;
     padding: 1rem;

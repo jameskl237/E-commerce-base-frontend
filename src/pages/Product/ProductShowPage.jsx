@@ -3,9 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { API_BASE_URL } from '../../config/constants';
 import './ProductShowPage.scss';
+import { useCart } from '../../context/CartContext';
 import { FiArrowLeft, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 const ProductShowPage = () => {
+  const { addToCart } = useCart();
   const { productId } = useParams();
   const navigate = useNavigate();
 
@@ -17,11 +20,41 @@ const ProductShowPage = () => {
     const fetchProduct = async () => {
       const res = await api.get(`/products/${productId}`);
       setProduct(res.data.data);
-      console.log("Product supplier shop name:", res.data.data.shop?.user?.name);
       setLoading(false);
     };
     fetchProduct();
   }, [productId]);
+
+  // Helper function to normalize phone number
+  const normalizePhone = (raw) => {
+    if (!raw) return null;
+    const digits = String(raw).replace(/\D+/g, '');
+    if (!digits) return null;
+    const cleaned = digits.replace(/^0+/, '');
+    return cleaned.length < 8 ? null : cleaned;
+  };
+
+  const handleBuyNow = () => {
+    const phone = normalizePhone(product.shop?.phone);
+
+    if (!phone) {
+      toast.error("Le numéro de téléphone de la boutique n'est pas disponible.");
+      return;
+    }
+
+    const message = `Bonjour, je suis intéressé par votre produit "${product.name}" au prix de ${product.price} FCFA. Est-il toujours disponible ?`;
+    const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(waUrl, '_blank');
+  };
+
+  const handleViewShop = () => {
+    if (product.shop?.id && product.shop?.name) {
+      navigate(`/shop/${product.shop.id}/${product.shop.name}`);
+    } else {
+      toast.error("Information sur la boutique non disponible.");
+    }
+  };
 
   if (loading) return <p>Chargement...</p>;
   if (!product) return <p>Produit introuvable</p>;
@@ -88,8 +121,13 @@ const ProductShowPage = () => {
           </div>
 
           <div className="actions">
-            <button className="cart">Ajouter au panier</button>
-            <button className="buy">Acheter maintenant</button>
+            <button className="cart" onClick={() => addToCart(product)}>Ajouter au panier</button>
+            <button className="buy" onClick={handleBuyNow}>Acheter maintenant</button>
+            {product.shop && (
+              <button className="view-shop" onClick={handleViewShop}>
+                Voir boutique
+              </button>
+            )}
           </div>
 
           <div className="details">

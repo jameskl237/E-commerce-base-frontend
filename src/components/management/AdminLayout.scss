@@ -1,0 +1,185 @@
+@use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
+
+.admin-dashboard {
+  padding: 2rem;
+  min-height: calc(100vh - #{$nav-height} - 3rem);
+
+  .dashboard-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      color: #003bb0;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+    }
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .back-icon {
+        font-size: 1.1rem;
+      }
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #003bb0;
+      margin: 0;
+      text-align: left;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+      margin: 0;
+      text-align: left;
+    }
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .management-card {
+    text-decoration: none;
+    display: block;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: inherit;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      text-decoration: none;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card-icon-container {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+
+      .card-icon {
+        font-size: 1.8rem;
+        color: #003bb0;
+      }
+    }
+
+    .card-text {
+      h3 {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin: 0 0 0.5rem 0;
+        color: #333;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// Dark mode styles
+.dashboard.dark .admin-dashboard {
+  .management-card {
+    background: #2a2a3d;
+    color: #f0f0f0;
+
+    .card-icon-container {
+      .card-icon {
+        color: #ff00ff;
+      }
+    }
+
+    .card-text {
+      h3 {
+        color: #f0f0f0;
+      }
+
+      p {
+        color: #ccc;
+      }
+    }
+  }
+}
+
+// Responsive styles
+@include responsive(md) {
+  .admin-dashboard {
+    padding: 1rem;
+
+    .dashboard-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+  }
+}
+
+@include responsive(sm) {
+  .admin-dashboard {
+    padding: 1rem;
+
+    .dashboard-header {
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+}
