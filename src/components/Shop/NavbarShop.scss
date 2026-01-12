@@ -13,7 +13,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  flex-wrap: wrap; // Allow items to wrap
+  // flex-wrap: wrap; // Allow items to wrap - REMOVED
 
   .logo {
     a {
@@ -79,7 +79,7 @@
     display: flex;
 
     @include responsive(lg) {
-      order: 3; // Move search bar below logo and nav icons
+      // order: 3; // REMOVED - No longer needed with row direction
       width: 100%;
       margin: 1rem 0;
       .nav-links {
@@ -143,16 +143,55 @@
 /* RESPONSIVE */
 @include responsive(lg) {
   .navbar {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row; // Changed from column to row
+    align-items: center; // Kept center
+    gap: 1rem; // Adjusted gap
 
     .logo {
-      width: 100%;
-      text-align: center;
-      margin-bottom: 1rem;
+      width: auto; // Changed to auto
+      text-align: left; // Changed to left
+      margin-bottom: 0; // Removed margin
     }
     .search-bar {
-      margin: 1rem auto;
+      margin: 0 1rem; // Adjusted margin
+      flex: 1; // Kept flex 1
+    }
+  }
+}
+
+@include responsive(sm) {
+  .navbar {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 2%; // Adjust padding for very small screens
+
+    .logo {
+      flex: 0 0 auto;
+      img {
+        height: 40px; // Smaller logo on tiny screens
+        width: 40px;
+      }
+    }
+
+    .search-bar {
+      flex: 1; // Allow search bar to grow and shrink
+      min-width: 80px; // Ensure search bar is not too small
+      margin: 0;
+      input {
+        padding: 0.5rem 0.8rem;
+      }
+      button {
+        padding: 0 0.8rem;
+      }
+    }
+
+    .nav-icons {
+      flex: 0 0 auto;
+      .nav-icon-link, .cart-link, .burger, button {
+        font-size: 1.1rem; // Smaller icons
+        margin-left: 0.5rem;
+      }
     }
   }
 }
