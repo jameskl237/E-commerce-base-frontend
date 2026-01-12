@@ -48,7 +48,7 @@
   transform: translateY(-50%);
 
   &:hover {
-    background-color: darken($light-color, 5%);
+    background-color: #f2f2f2;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     transform: translateY(-50%) translateY(-2px);
   }

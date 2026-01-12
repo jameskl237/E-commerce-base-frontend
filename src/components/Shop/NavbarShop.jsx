@@ -51,7 +51,10 @@ const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
       <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
         {menuLinks.map((link, index) => (
           <li key={index}>
-            {link.to ? <Link to={link.to}>{link.label}</Link> : <a href={link.href}>{link.label}</a>}
+            {(link.to || (link.href && link.href.startsWith('/')))
+              ? <Link to={link.to || link.href}>{link.label}</Link>
+              : <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            }
           </li>
         ))}
       </ul>
@@ -72,10 +75,10 @@ const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
       {/* Icons */}
       <div className="nav-icons">
         <li ref={cartRef}>
-          <a href="/cart" className="cart-link" onClick={handleCartClick}>
+          <button type="button" className="cart-link" onClick={handleCartClick}>
             <FaShoppingCart />
             {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
-          </a>
+          </button>
           {isCartVisible && <CartDropdown />}
         </li>
         <Link to={userIconLink} className="nav-icon-link">

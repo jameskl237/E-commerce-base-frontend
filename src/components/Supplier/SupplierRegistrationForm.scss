@@ -93,13 +93,13 @@
     margin-top: 1rem;
 
     &:hover {
-      background-color: darken($accent-color, 10%);
+      background-color: #ff3857;
     }
   }
 
   .error-message {
     color: $danger-color;
-    background-color: lighten($danger-color, 35%);
+    background-color: #fddce0;
     border: 1px solid $danger-color;
     padding: 1rem;
     border-radius: 4px;
@@ -109,7 +109,7 @@
 
   .success-message {
     color: $success-color;
-    background-color: lighten($success-color, 45%);
+    background-color: #d4f4db;
     border: 1px solid $success-color;
     padding: 1rem;
     border-radius: 4px;

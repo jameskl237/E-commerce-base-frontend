@@ -25,7 +25,7 @@ const AllProducts = () => {
 
   const menuLinks = [
     // { label: "Catégories", href: "#" },
-    { label: "Boutiques", href: "/shops" },
+    { label: "Boutiques", to: "/shops" },
     // { label: "Centre d’acheteurs", href: "#" },
     // { label: "Assistance", href: "#" },
   ];

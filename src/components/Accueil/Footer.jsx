@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Footer.scss";
 import { FaFacebookF,FaWhatsapp, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
@@ -19,8 +20,8 @@ function Footer() {
         <div className="footer-section">
           <h3>Liens utiles</h3>
           <ul>
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/shop">Boutique</a></li>
+            <li><Link to="/">Accueil</Link></li>
+            <li><Link to="/shop">Boutique</Link></li>
             {/* <li><a href="/about">À propos</a></li>
             <li><a href="/contact">Contact</a></li> */}
           </ul>
