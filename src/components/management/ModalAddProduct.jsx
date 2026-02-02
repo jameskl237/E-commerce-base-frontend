@@ -275,9 +275,14 @@ const ModalAddProduct = ({
       console.log("Réponse de l'API:", response);
 
       if (response.status === 200 || response.status === 201) {
-        toast.success("Produit ajouté avec succès !");
-        onProductAdded && onProductAdded();
-        handleClose();
+        try {
+          toast.success("Produit ajouté avec succès !");
+          onProductAdded && onProductAdded();
+          handleClose();
+        } catch (e) {
+          console.error("Erreur lors de l'appel de onProductAdded ou handleClose", e);
+          toast.error("Erreur lors de la mise à jour de l'interface.");
+        }
       } else {
         toast.error("Erreur inattendue lors de l'ajout du produit");
       }
@@ -287,7 +292,10 @@ const ModalAddProduct = ({
       let errorMessage =
         "Erreur lors de l'ajout du produit. Veuillez réessayer.";
 
-      if (error.response) {
+      if (error.code === 'ECONNABORTED') {
+        errorMessage = "La requête a expiré. Veuillez vérifier votre connexion internet et réessayer.";
+        console.error("Timeout Error:", error.message);
+      } else if (error.response) {
         // Erreur de réponse du serveur
         console.error("Erreur de réponse:", error.response.data);
 

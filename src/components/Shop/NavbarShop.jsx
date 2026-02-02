@@ -51,9 +51,9 @@ const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
       <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
         {menuLinks.map((link, index) => (
           <li key={index}>
-            {(link.to || (link.href && link.href.startsWith('/')))
-              ? <Link to={link.to || link.href}>{link.label}</Link>
-              : <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            { (link.href && (link.href.startsWith('http') || link.href.startsWith('//')))
+              ? <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+              : <Link to={link.to || link.href}>{link.label}</Link>
             }
           </li>
         ))}

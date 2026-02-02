@@ -11,6 +11,7 @@ const api = axios.create({
     Accept: "application/json",
   },
   timeout: 15000,
+  withCredentials: true,
 });
 
 // Attacher token automatiquement si présent
@@ -46,7 +47,7 @@ api.interceptors.response.use(
 
 // Récupérer le cookie CSRF
 export async function getCsrfCookie() {
-  return await axios.get(`${API_ROOT}/backend/sanctum/csrf-cookie`, {
+  return await axios.get(`${API_ROOT}/sanctum/csrf-cookie`, {
     withCredentials: true,
   });
 }
