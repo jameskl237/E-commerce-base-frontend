@@ -6,7 +6,7 @@ import Footer from '../../components/Accueil/Footer';
 import mascotHero from '../../assets/Maketa.png';
 
 // New mascot images for feature sections
-const mascotPanier = '/Maketu_panier.png';
+const mascotPanier = '../../assets/Maketu_panier.png';
 import mascotOrdi from '../../assets/Maketu_ordi.png';
 import mascotCoeur from '../../assets/Maketu_coeur.png';
 import mascotPhone from '../../assets/Maketu_phone.png';
