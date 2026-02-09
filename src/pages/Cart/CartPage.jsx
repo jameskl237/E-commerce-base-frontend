@@ -5,16 +5,16 @@ import './CartPage.scss';
 import Navbar from '../../components/Accueil/Navbar';
 import Footer from '../../components/Accueil/Footer';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../../config/constants';
 
 const FRONTEND_URL = window.location.origin;
-const BACKEND_URL = "https://maketubackend.srv696182.hstgr.cloud";
 
 const CartPage = () => {
   const { cartItems, removeFromCart, clearCart } = useCart();
 
   const getProductImage = (item) => {
     if (item.medias && item.medias.length > 0) {
-      return `${BACKEND_URL}/storage/${item.medias[0].url}`;
+      return `${API_BASE_URL}/storage/${item.medias[0].url}`;
     }
     return `${FRONTEND_URL}/Maketu_panier.png`;
   };

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiChevronLeft, FiChevronRight, FiTrash2 } from 'react-icons/fi';
 import './MediaCarousel.scss';
-
-// L'URL de base de votre backend.
-const API_BASE_URL = 'https://maketubackend.srv696182.hstgr.cloud/';
+import { API_BASE_URL } from '../../../config/constants';
 
 const MediaCarousel = ({ product, onDelete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

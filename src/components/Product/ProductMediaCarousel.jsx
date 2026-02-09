@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ProductMediaCarousel.scss';
 import { FiChevronLeft, FiChevronRight, FiPlayCircle, FiImage } from 'react-icons/fi';
+import { API_BASE_URL } from '../../config/constants';
 
 const ProductMediaCarousel = ({ medias, productName }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -33,12 +34,12 @@ const ProductMediaCarousel = ({ medias, productName }) => {
       <div className="media-display">
         {currentMedia.url.includes('.mp4') || currentMedia.file_path.includes('.mp4') ||
          currentMedia.url.includes('.webm') || currentMedia.file_path.includes('.webm') ? (
-          <video controls src={currentMedia.url || `https://maketubackend.srv696182.hstgr.cloud//storage/${currentMedia.file_path}`}>
+          <video controls src={currentMedia.url || `${API_BASE_URL}/storage/${currentMedia.file_path}`}>
             Your browser does not support the video tag.
           </video>
         ) : (
           <img
-            src={currentMedia.url || `https://maketubackend.srv696182.hstgr.cloud//storage/${currentMedia.file_path}`}
+            src={currentMedia.url || `${API_BASE_URL}/storage/${currentMedia.file_path}`}
             alt={`${productName} - ${currentIndex + 1}`}
           />
         )}
@@ -65,7 +66,7 @@ const ProductMediaCarousel = ({ medias, productName }) => {
               <FiPlayCircle className="video-thumbnail-icon" />
             ) : (
               <img
-                src={media.url || `https://maketubackend.srv696182.hstgr.cloud//storage/${media.file_path}`}
+                src={media.url || `${API_BASE_URL}/storage/${media.file_path}`}
                 alt={`Thumbnail ${index + 1}`}
               />
             )}
