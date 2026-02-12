@@ -35,7 +35,9 @@ const SingleShopPage = () => {
       .then(res => {
         const shopData = res.data.data || res.data;
         setShop(shopData);
-        setAllProducts(shopData.products || []);
+        // S'assurer que products est un tableau
+        const products = shopData.products || [];
+        setAllProducts(Array.isArray(products) ? products : []);
         console.log("Données de la boutique chargées :", shopData);
         setLoading(false);
       })
@@ -43,11 +45,13 @@ const SingleShopPage = () => {
         console.error("Erreur lors du chargement des données de la boutique:", err);
         setError('Impossible de charger les données de la boutique.');
         setLoading(false);
+        setAllProducts([]);
       });
   }, [shopId]);
 
   useEffect(() => {
-    let filteredData = allProducts;
+    // S'assurer que allProducts est un tableau
+    let filteredData = Array.isArray(allProducts) ? [...allProducts] : [];
 
     if (searchQuery) {
       filteredData = filteredData.filter(product =>
@@ -144,7 +148,7 @@ const SingleShopPage = () => {
       <section className="shop-products">
         <h2>Produits de la boutique</h2>
         <div className="product-grid">
-          {products.length > 0 ? (
+          {Array.isArray(products) && products.length > 0 ? (
             products.map(p => {
               const imageUrl = getPrincipalImageUrl(p);
               return (

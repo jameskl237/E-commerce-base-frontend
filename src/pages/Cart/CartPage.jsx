@@ -36,14 +36,16 @@ const CartPage = () => {
   };
 
   const composeMessage = (products) => {
-    const items = products.map(
+    // S'assurer que products est un tableau
+    const safeProducts = Array.isArray(products) ? products : [];
+    const items = safeProducts.map(
       (p, i) => {
         const totalPrice = (p.price || 0) * (p.quantity || 1);
         return `${i + 1}. ${p.name}${p.quantity ? ` x${p.quantity}` : ''} — ${totalPrice} FCFA`;
       }
     );
     
-    const total = products.reduce((sum, p) => sum + (p.price || 0) * (p.quantity || 1), 0);
+    const total = safeProducts.reduce((sum, p) => sum + (p.price || 0) * (p.quantity || 1), 0);
     
     const lines = [
       "Nouvelle commande reçue :",
@@ -55,8 +57,8 @@ const CartPage = () => {
       "Merci de confirmer la disponibilité et le délai de livraison.",
     ];
 
-    if (import.meta.env.PROD) {
-      const firstImage = getProductImage(products[0]);
+    if (import.meta.env.PROD && safeProducts.length > 0) {
+      const firstImage = getProductImage(safeProducts[0]);
       lines.unshift(firstImage, "");
     }
 
@@ -64,12 +66,14 @@ const CartPage = () => {
   };
 
   const handleCheckout = () => {
-    if (!cartItems || cartItems.length === 0) {
+    // S'assurer que cartItems est un tableau
+    const safeCartItems = Array.isArray(cartItems) ? cartItems : [];
+    if (!safeCartItems || safeCartItems.length === 0) {
       toast.warn("Le panier est vide.");
       return;
     }
 
-    const byPhone = cartItems.reduce((acc, item) => {
+    const byPhone = safeCartItems.reduce((acc, item) => {
       const raw = getSupplierPhone(item);
       const phone = normalizePhone(raw);
       if (!phone) {
@@ -82,7 +86,7 @@ const CartPage = () => {
       return acc;
     }, {});
 
-    if (byPhone.__missing__ && byPhone.__missing__.length > 0) {
+    if (byPhone.__missing__ && Array.isArray(byPhone.__missing__) && byPhone.__missing__.length > 0) {
       const names = byPhone.__missing__.map((p) => p.name).join(', ');
       const proceed = window.confirm(
         `Certains produits n'ont pas de numéro fournisseur valide: ${names}.\nContinuer pour les autres fournisseurs ?`
@@ -121,7 +125,7 @@ const CartPage = () => {
       <Navbar />
       <div className="cart-page">
         <h1>Votre Panier</h1>
-        {cartItems.length === 0 ? (
+        {(!Array.isArray(cartItems) || cartItems.length === 0) ? (
           <div className="empty-cart">
             <p>Votre panier est vide.</p>
             <Link to="/products" className="btn btn-black btn-back">Continuer vos achats</Link>
