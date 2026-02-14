@@ -1,7 +1,7 @@
 // src/api/api.js
 import axios from "axios";
 
-const API_ROOT = "https://maketubackend.srv696182.hstgr.cloud";
+const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const API_BASE = `${API_ROOT}/api`;
 
 const api = axios.create({
@@ -11,7 +11,6 @@ const api = axios.create({
     Accept: "application/json",
   },
   timeout: 15000,
-  withCredentials: true, // CETTE LIGNE A ÉTÉ AJOUTÉE
 });
 
 // Attacher token automatiquement si présent

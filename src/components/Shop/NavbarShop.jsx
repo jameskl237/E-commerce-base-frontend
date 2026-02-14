@@ -6,10 +6,12 @@ import './NavbarShop.scss'; // Import its own styles
 import { useCart } from '../../context/CartContext';
 import CartDropdown from '../Cart/CartDropdown';
 
-const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
+const NavbarShop = ({ searchQuery = "", setSearchQuery = () => {}, menuLinks = [] }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { cartItems } = useCart();
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const safeCartItems = Array.isArray(cartItems) ? cartItems : [];
+  const safeMenuLinks = Array.isArray(menuLinks) ? menuLinks : [];
+  const totalItems = safeCartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
   const [isCartVisible, setIsCartVisible] = useState(false);
   const cartRef = useRef(null);
 
@@ -49,7 +51,7 @@ const NavbarShop = ({ searchQuery, setSearchQuery, menuLinks }) => {
 
       {/* Menu links desktop */}
       <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-        {menuLinks.map((link, index) => (
+        {safeMenuLinks.map((link, index) => (
           <li key={index}>
             { (link.href && (link.href.startsWith('http') || link.href.startsWith('//')))
               ? <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>

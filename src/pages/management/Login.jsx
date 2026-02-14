@@ -48,15 +48,8 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-    <div className="auth-container">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <div className="auth-header">
-          <button type="button" onClick={() => navigate(-1)} className="back-button">
-            &larr;
-          </button>
-          <h2>Connexion</h2>
-        </div>
-
+        <h2>Connexion</h2>
 
         <label>Email
           <input
@@ -96,8 +89,6 @@ export default function Login() {
           Se connecter avec Google
         </button>
       </form>
-    </div>
-
     </div>
   );
 }
