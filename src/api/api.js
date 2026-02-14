@@ -1,6 +1,8 @@
 // src/api/api.js
 import axios from "axios";
-import { API_ROOT, API_BASE, USE_CSRF } from "../config/constants";
+
+const API_ROOT = "https://maketubackend.srv696182.hstgr.cloud";
+const API_BASE = `${API_ROOT}/api`;
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -9,7 +11,7 @@ const api = axios.create({
     Accept: "application/json",
   },
   timeout: 15000,
-  withCredentials: USE_CSRF,
+  withCredentials: true, // CETTE LIGNE A ÉTÉ AJOUTÉE
 });
 
 // Attacher token automatiquement si présent
@@ -45,7 +47,6 @@ api.interceptors.response.use(
 
 // Récupérer le cookie CSRF
 export async function getCsrfCookie() {
-  if (!USE_CSRF) return null;
   return await axios.get(`${API_ROOT}/sanctum/csrf-cookie`, {
     withCredentials: true,
   });

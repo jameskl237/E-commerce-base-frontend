@@ -6,7 +6,10 @@ import "./CartDropdown.scss";
 const CartDropdown = () => {
   const { cartItems = [] } = useCart();
 
-  if (!cartItems.length) {
+  // S'assurer que cartItems est un tableau
+  const safeCartItems = Array.isArray(cartItems) ? cartItems : [];
+
+  if (!safeCartItems.length) {
     return (
       <div className="cart-dropdown empty">
         <div className="empty-msg">Votre panier est vide</div>
@@ -15,7 +18,7 @@ const CartDropdown = () => {
     );
   }
 
-  const marqueeText = cartItems
+  const marqueeText = safeCartItems
     .map((it) => `${it.name}${it.quantity && it.quantity > 1 ? ` x${it.quantity}` : ""}`)
     .join("  •  ");
 
@@ -26,7 +29,7 @@ const CartDropdown = () => {
       </div>
 
       <ul className="cart-items">
-        {cartItems.map((item) => (
+        {safeCartItems.map((item) => (
           <li key={item.id || item.productId || item.name} className="cart-item">
             <span className="item-name">{item.name}</span>
             <span className="item-qty">x{item.quantity || 1}</span>

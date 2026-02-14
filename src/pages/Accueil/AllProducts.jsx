@@ -35,7 +35,13 @@ const AllProducts = () => {
     api.get("/products")
       .then((res) => {
         const allData = res.data.data || res.data;
-        setAllProducts(allData);
+        // S'assurer que allData est un tableau
+        if (Array.isArray(allData)) {
+          setAllProducts(allData);
+        } else {
+          console.error("La réponse de l'API /products n'est pas un tableau:", allData);
+          setAllProducts([]);
+        }
         console.log("Données de la boutique chargées :", allData);
         setLoading(false);
       })
@@ -43,6 +49,7 @@ const AllProducts = () => {
         console.error("Erreur lors du chargement des produits :", err);
         setError("Impossible de charger les produits");
         setLoading(false);
+        setAllProducts([]);
       });
   }, []);
 
@@ -174,7 +181,7 @@ const AllProducts = () => {
           className="category-dropdown"
         >
           <option value="">Toutes les catégories</option>
-          {categories.map(cat => (
+          {Array.isArray(categories) && categories.map(cat => (
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
         </select>
@@ -187,7 +194,7 @@ const AllProducts = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <div className="product-grid">
-          {products.length > 0
+          {Array.isArray(products) && products.length > 0
             ? products.map((p) => {
                 const imageUrl = getPrincipalImageUrl(p);
                 return (

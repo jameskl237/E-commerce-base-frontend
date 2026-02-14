@@ -30,19 +30,27 @@ const Shop = () => {
     api.get("/shops")
       .then(res => {
         const allData = res.data.data || res.data;
-        setAllShops(allData);
+        // S'assurer que allData est un tableau
+        if (Array.isArray(allData)) {
+          setAllShops(allData);
+        } else {
+          console.error("La réponse de l'API /shops n'est pas un tableau:", allData);
+          setAllShops([]);
+        }
         setLoading(false);
       })
       .catch(err => {
         console.error("Erreur lors du chargement des boutiques :", err);
         setError("Impossible de charger les boutiques.");
         setLoading(false);
+        setAllShops([]);
       });
   }, []);
 
   // Handle filtering and pagination on the client side
   useEffect(() => {
-    let filteredData = allShops;
+    // S'assurer que allShops est un tableau
+    let filteredData = Array.isArray(allShops) ? [...allShops] : [];
 
     // Apply search filter
     if (searchQuery) {
@@ -88,7 +96,7 @@ const Shop = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
         
         <div className="shops-grid">
-          {shops.length > 0 ? (
+          {Array.isArray(shops) && shops.length > 0 ? (
             shops.map(shop => (
               <Link to={`/shop/${shop.id}/${encodeURIComponent(shop.name)}`} key={shop.id} className="shop-card-link">
                 <div className="shop-card">

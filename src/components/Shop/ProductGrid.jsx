@@ -6,10 +6,13 @@ const ProductGrid = ({ loading, error, products }) => {
   if (loading) return <p>Chargement...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
+  // S'assurer que products est un tableau
+  const safeProducts = Array.isArray(products) ? products : [];
+
   return (
     <div className="product-grid">
-      {products.length > 0 ? (
-        products.map((p) => <ProductCard key={p.id} product={p} />)
+      {safeProducts.length > 0 ? (
+        safeProducts.map((p) => <ProductCard key={p.id} product={p} />)
       ) : (
         <div className="no-products">
           <FaStore size={48} />
