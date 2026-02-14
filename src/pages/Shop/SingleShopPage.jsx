@@ -33,11 +33,37 @@ const SingleShopPage = () => {
     setLoading(true);
     api.get(`/shops/${shopId}`)
       .then(res => {
-        const shopData = res.data.data || res.data;
+        // Extraire les données de la réponse normalisée
+        let shopData = null;
+        
+        // Gérer différentes structures de réponse
+        if (res.data && res.data.data !== undefined) {
+          // Structure ApiResponse: {success, message, data, ...}
+          shopData = res.data.data;
+        } else if (res.data && typeof res.data === 'object') {
+          // Réponse directe en objet
+          shopData = res.data;
+        } else {
+          shopData = null;
+        }
+        
+        if (!shopData) {
+          setError('Boutique non trouvée.');
+          setLoading(false);
+          setAllProducts([]);
+          return;
+        }
+        
         setShop(shopData);
-        // S'assurer que products est un tableau
-        const products = shopData.products || [];
-        setAllProducts(Array.isArray(products) ? products : []);
+        
+        // S'assurer que products est toujours un tableau
+        let products = shopData.products || [];
+        if (!Array.isArray(products)) {
+          console.error("Les produits de la boutique ne sont pas un tableau:", products);
+          products = [];
+        }
+        
+        setAllProducts(products);
         console.log("Données de la boutique chargées :", shopData);
         setLoading(false);
       })

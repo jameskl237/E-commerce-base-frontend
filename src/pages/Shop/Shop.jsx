@@ -29,14 +29,30 @@ const Shop = () => {
   useEffect(() => {
     api.get("/shops")
       .then(res => {
-        const allData = res.data.data || res.data;
-        // S'assurer que allData est un tableau
-        if (Array.isArray(allData)) {
-          setAllShops(allData);
+        // Extraire les données de la réponse normalisée
+        let allData = null;
+        
+        // Gérer différentes structures de réponse
+        if (res.data && res.data.data !== undefined) {
+          // Structure ApiResponse: {success, message, data, ...}
+          allData = res.data.data;
+        } else if (Array.isArray(res.data)) {
+          // Réponse directe en tableau
+          allData = res.data;
+        } else if (res.data && typeof res.data === 'object') {
+          // Autre structure, essayer de trouver un tableau
+          allData = res.data.shops || res.data.items || [];
         } else {
-          console.error("La réponse de l'API /shops n'est pas un tableau:", allData);
-          setAllShops([]);
+          allData = [];
         }
+        
+        // S'assurer que allData est toujours un tableau
+        if (!Array.isArray(allData)) {
+          console.error("La réponse de l'API /shops n'est pas un tableau:", allData, res.data);
+          allData = [];
+        }
+        
+        setAllShops(allData);
         setLoading(false);
       })
       .catch(err => {

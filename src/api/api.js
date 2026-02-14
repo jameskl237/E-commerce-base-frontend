@@ -25,9 +25,25 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor response pour gérer 401 / expiration de token
+// Interceptor response pour normaliser les réponses et gérer 401 / expiration de token
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    // Normaliser la structure de réponse pour garantir que res.data.data existe toujours
+    // et est un tableau pour les endpoints qui retournent des listes
+    if (res.data && typeof res.data === 'object') {
+      // Si la réponse a la structure {success, message, data, ...}
+      if (res.data.hasOwnProperty('data')) {
+        // S'assurer que data est toujours un tableau si c'est une liste
+        if (res.data.data === null || res.data.data === undefined) {
+          res.data.data = [];
+        } else if (!Array.isArray(res.data.data) && typeof res.data.data === 'object') {
+          // Si data est un objet unique, le laisser tel quel (pour les endpoints show)
+          // Ne rien faire
+        }
+      }
+    }
+    return res;
+  },
   (err) => {
     // Si erreur 401 (non autorisé), le token est invalide ou expiré
     if (err.response?.status === 401) {

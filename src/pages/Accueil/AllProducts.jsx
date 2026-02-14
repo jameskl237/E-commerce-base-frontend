@@ -34,15 +34,31 @@ const AllProducts = () => {
   useEffect(() => {
     api.get("/products")
       .then((res) => {
-        const allData = res.data.data || res.data;
-        // S'assurer que allData est un tableau
-        if (Array.isArray(allData)) {
-          setAllProducts(allData);
+        // Extraire les données de la réponse normalisée
+        let allData = null;
+        
+        // Gérer différentes structures de réponse
+        if (res.data && res.data.data !== undefined) {
+          // Structure ApiResponse: {success, message, data, ...}
+          allData = res.data.data;
+        } else if (Array.isArray(res.data)) {
+          // Réponse directe en tableau
+          allData = res.data;
+        } else if (res.data && typeof res.data === 'object') {
+          // Autre structure, essayer de trouver un tableau
+          allData = res.data.products || res.data.items || [];
         } else {
-          console.error("La réponse de l'API /products n'est pas un tableau:", allData);
-          setAllProducts([]);
+          allData = [];
         }
-        console.log("Données de la boutique chargées :", allData);
+        
+        // S'assurer que allData est toujours un tableau
+        if (!Array.isArray(allData)) {
+          console.error("La réponse de l'API /products n'est pas un tableau:", allData, res.data);
+          allData = [];
+        }
+        
+        setAllProducts(allData);
+        console.log("Données des produits chargées :", allData);
         setLoading(false);
       })
       .catch((err) => {
@@ -57,15 +73,31 @@ const AllProducts = () => {
   useEffect(() => {
     api.get("/categories")
       .then(res => {
-        const cats = res.data.data || res.data;
-        if (Array.isArray(cats)) {
-          setCategories(cats);
+        // Extraire les données de la réponse normalisée
+        let cats = null;
+        
+        // Gérer différentes structures de réponse
+        if (res.data && res.data.data !== undefined) {
+          cats = res.data.data;
+        } else if (Array.isArray(res.data)) {
+          cats = res.data;
+        } else if (res.data && typeof res.data === 'object') {
+          cats = res.data.categories || res.data.items || [];
         } else {
-          console.error("La réponse de l'API /categories n'est pas un tableau:", cats);
+          cats = [];
         }
+        
+        // S'assurer que cats est toujours un tableau
+        if (!Array.isArray(cats)) {
+          console.error("La réponse de l'API /categories n'est pas un tableau:", cats, res.data);
+          cats = [];
+        }
+        
+        setCategories(cats);
       })
       .catch(err => {
         console.error("Erreur lors du chargement des catégories :", err);
+        setCategories([]);
       });
   }, []);
 
